@@ -328,3 +328,7 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+/弹幕合并/wwwroot/dmhb/*
+/弹幕合并/upfile/*
+/弹幕合并/jsonfiles/*
