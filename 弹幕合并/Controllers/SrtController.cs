@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -9,12 +10,11 @@ using 弹幕合并.Bussiness.Entity;
 using 弹幕合并.Common;
 
 namespace 弹幕合并.Controllers
-{
-    // [Route("api/[controller]")]
+{    
     [ApiController]
     public class SrtController : BaseController
     {
-        private SrtBussiness bu = new SrtBussiness();
+        public static SrtBussiness bu = new SrtBussiness();
 
         [HttpPost]
         [Route("api/srt/updatesrtfile")]
@@ -128,5 +128,7 @@ namespace 弹幕合并.Controllers
             var ret = bu.DeleteSrt(UserId, srtId);
             return new ServerReturn {error_msg = ret, error = string.IsNullOrEmpty(ret) ? 0 : -1};
         }
+
+
     }
 }

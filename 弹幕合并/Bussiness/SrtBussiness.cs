@@ -119,7 +119,7 @@ namespace 弹幕合并.Bussiness
             }
 
             line.Trans = api.GetTransResult3(line.Text, "en", "zh");
-            File.WriteAllText(ret.jsonObj.FileName, JsonConvert.SerializeObject(ret.jsonObj));
+            File.WriteAllText(ret.srtFile.JsonSrtFileName, JsonConvert.SerializeObject(ret.jsonObj));
             return (null, new[] {line});
         }
 
@@ -152,7 +152,7 @@ namespace 弹幕合并.Bussiness
                     preLine.Trans = api.GetTransResult3(preLine.Text, "en", "zh");
                     line.Trans = api.GetTransResult3(line.Text, "en", "zh");
 
-                    File.WriteAllText(ret.jsonObj.FileName, JsonConvert.SerializeObject(ret.jsonObj));
+                    File.WriteAllText(ret.srtFile.JsonSrtFileName, JsonConvert.SerializeObject(ret.jsonObj));
                     return (null, new[] {line, preLine});
                 }
             }
@@ -182,7 +182,7 @@ namespace 弹幕合并.Bussiness
                     nextLine.Trans = api.GetTransResult3(nextLine.Text, "en", "zh");
                     line.Trans = api.GetTransResult3(line.Text, "en", "zh");
 
-                    File.WriteAllText(ret.jsonObj.FileName, JsonConvert.SerializeObject(ret.jsonObj));
+                    File.WriteAllText(ret.srtFile.JsonSrtFileName, JsonConvert.SerializeObject(ret.jsonObj));
                     return (null, new[] { line, nextLine });
                 }
             }

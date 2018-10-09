@@ -9,6 +9,8 @@
           <button @click='onedit(srtfile.id, false)'>编辑</button>
           <button @click='onedit(srtfile.id, true)'>手机编辑</button>
           <button @click='ondelete(srtfile.id)'>删除</button>
+          <button @click='ondownload(srtfile.id)'>下载</button>
+          <button @click='ondownload2(srtfile.id)'>下载中文</button>
         </span>
       </li>
     </ul>
@@ -65,6 +67,12 @@ export default {
         });
       }      
     },
+    ondownload(id){
+      window.location.href = '../srt/download/' + id;
+    },
+    ondownload2(id){
+      window.location.href = '../srt/downloadtrans/' + id;
+    }
   }
 }
 </script>

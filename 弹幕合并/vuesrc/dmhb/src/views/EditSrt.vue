@@ -6,7 +6,7 @@
           <table>
               <tr  v-for="item in srtlines" :key='item.id'>
                   <td v-show="!mobile">
-                  {{ item.from}} => {{item.to}}<br> ({{ item.toSec}})
+                  {{ item.from}} => {{item.to}}<br> ({{ item.duration}})
                   </td>
                   <td>
                       {{ item.text }}
