@@ -25,11 +25,11 @@ namespace B站发弹幕
         /// 加载配置文件
         /// </summary>
         /// <returns></returns>
-        public static Config LoadConfig()
+        public static Config LoadConfig(string configFile = "config.json")
         {
             try
             {
-                var json = File.ReadAllText("send_srt_config.json", Encoding.Default);
+                var json = File.ReadAllText(configFile, Encoding.Default);
                 var ret = JsonConvert.DeserializeObject<Config>(json);
                 return ret;
             }

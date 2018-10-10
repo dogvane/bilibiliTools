@@ -23,7 +23,7 @@ namespace 弹幕合并.Controllers
 
         public IActionResult Index()
         {
-            return View("UpSrt");
+            return View("Index");
         }
 
         public IActionResult About()
