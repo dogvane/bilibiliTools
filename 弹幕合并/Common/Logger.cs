@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace µ¯Ä»ºÏ²¢.Common
+namespace å¼¹å¹•åˆå¹¶.Common
 {
     public static class Logger
     {
