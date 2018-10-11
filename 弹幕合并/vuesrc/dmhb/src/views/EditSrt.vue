@@ -86,6 +86,9 @@ export default {
                     if(item.id == changeItem.id){
                         item.trans = changeItem.trans;
                         item.text = changeItem.text;
+                        item.from = changeItem.from;
+                        item.to = changeItem.to;
+                        item.duration = changeItem.duration;
                         break;
                     }
                 }
