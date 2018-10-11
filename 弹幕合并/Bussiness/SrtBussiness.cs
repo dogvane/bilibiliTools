@@ -57,7 +57,7 @@ namespace 弹幕合并.Bussiness
             var srt = new SrtManagerT<TransBattuta>();
             var battute = srt.LoadBattuteByFile(fileName);
             var rets = 合并字幕(battute, 5.1);
-            rets = 合并字幕(rets, 6.0);
+            //rets = 合并字幕(rets, 6.0);
             return rets;
         }
 
@@ -208,14 +208,19 @@ namespace 弹幕合并.Bussiness
         /// <param name="userId"></param>
         /// <param name="fileName"></param>
         /// <param name="context"></param>
+        /// <param name="ismerge">是否合并弹幕</param>
         /// <returns></returns>
-        public SrtFile UploadSrtFile(int userId, string fileName, byte[] context)
+        public SrtFile UploadSrtFile(int userId, string fileName, byte[] context, bool ismerge = true)
         {
             var saveFile = Path.Combine("upfiles/", userId + "_" + fileName);
 
             File.WriteAllBytes(saveFile, context);
+            List<TransBattuta> battuata;
+            if (ismerge)
+                battuata = 合并文件字幕(saveFile);
+            else
+                battuata = new SrtManagerT<TransBattuta>().LoadBattuteByFile(saveFile);
 
-            var battuata = 合并文件字幕(saveFile);
             var jsonObj = new SrtJsonFile();
             jsonObj.Battutas = battuata;
             jsonObj.FileName = fileName;

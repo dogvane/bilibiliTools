@@ -18,17 +18,22 @@ namespace 弹幕合并.Controllers
 
         [HttpPost]
         [Route("api/srt/updatesrtfile")]
-        public ServerReturn UpdateSrtFile(IFormCollection files)
+        public ServerReturn UpdateSrtFile(IFormCollection postData)
         {
-            if (files.Files.Count == 0)
+            if (postData.Files.Count == 0)
                 return new ServerReturn {error = -1, error_msg = "没有上传文件"};
 
-            var file = files.Files[0];
+            var file = postData.Files[0];
+            var ismergeStr = postData["ismerge"].LastOrDefault();
+            bool ismerge = false;
+            if (!string.IsNullOrEmpty(ismergeStr))
+                bool.TryParse(ismergeStr, out ismerge);
+
             using (var stream = file.OpenReadStream())
             {
                 var bytes = new byte[file.Length];
                 stream.Read(bytes, 0, (int)file.Length);
-                bu.UploadSrtFile(UserId, file.FileName, bytes);
+                bu.UploadSrtFile(UserId, file.FileName, bytes, ismerge);
             }
 
             return new ServerReturn { };

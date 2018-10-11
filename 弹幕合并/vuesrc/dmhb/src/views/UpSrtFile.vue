@@ -3,6 +3,7 @@
     上传文件
         <input type="file" name="updateFile" id="updateFile" multiple=""  v-on:change="fileChange($event.target.files)"/>
         <button type="button" v-on:click="upload()">上传</button>
+        合并弹幕<input type="checkbox" v-model="ismerge" />
   </div>
 </template>
 
@@ -56,17 +57,19 @@ export default {
   },
   data() {
     return {
-      files: new FormData()
+      FormData: new FormData(),
+      ismerge: true,
     }
   },
   methods: {
     fileChange(fileList) {
         console.log(fileList);
-        this.files.append("file", fileList[0], fileList[0].name);
+        this.FormData.append("file", fileList[0], fileList[0].name);
     },
     upload() {
-        const files = this.files;
-        axios.post(`/api/srt/updatesrtfile`, files,
+        const postData = this.FormData;
+        postData.append('ismerge', this.ismerge);
+        axios.post(`/api/srt/updatesrtfile`, postData,
             {
                 headers: {
                     'Content-Type': 'multipart/form-data'
