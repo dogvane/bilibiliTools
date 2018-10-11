@@ -59,7 +59,7 @@ namespace B站发弹幕
             var lines = File.ReadAllLines(fileName, Encoding.Default);
             var srtReader = new SrtManager();
             var battutes = srtReader.LoadBattute(lines);
-            for (var i = 10; i < battutes.Count; i++)
+            for (var i = 0; i < battutes.Count; i++)
             {
                 var item = battutes[i];
                 Console.WriteLine(item.Id);
