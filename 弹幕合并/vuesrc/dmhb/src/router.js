@@ -21,7 +21,7 @@ export default new Router({
             component: UpSrtFile,
         },
         {
-            path: '/editsrt',
+            path: '/editsrt/:srtId/:mobile',
             name: 'editsrt',
             component: editsrt,
         },

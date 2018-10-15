@@ -60,6 +60,8 @@ export default {
     }
   },
   created(){
+      console.log('on edit', this.$route.params);
+      
       let srtId = this.$route.params.srtId;
       if(this.$route.params.mobile)
         this.mobile = true;

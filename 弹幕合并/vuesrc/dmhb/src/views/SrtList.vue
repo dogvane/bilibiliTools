@@ -43,6 +43,7 @@ export default {
     };
   },
   created(){
+    
     const that = this;
     webapi.getSrtList().then(result=>{
       console.log(that);
@@ -55,7 +56,8 @@ export default {
   methods:
   {
     onedit(id, mobile){
-      this.$router.push({ name: 'editsrt', params: { srtId:id, mobile }})
+      // this.$router.push({ name: 'editsrt', params: { srtId:id, mobile }})
+      this.$router.push({ path: '/editsrt/' + id + "/" + mobile})
     },
     ondelete(id){
       if(confirm('是否要删除？')){
