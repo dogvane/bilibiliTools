@@ -11,6 +11,7 @@
           <button @click='ondelete(srtfile.id)'>删除</button>
           <button @click='ondownload(srtfile.id)'>下载</button>
           <button @click='ondownload2(srtfile.id)'>下载中文</button>
+          <button @click='ondownload3(srtfile.id)'>下载中英文</button>
         </span>
       </li>
     </ul>
@@ -72,6 +73,9 @@ export default {
     },
     ondownload2(id){
       window.location.href = '../srt/downloadtrans/' + id;
+    },
+    ondownload3(id){
+      window.location.href = '../srt/downloadtwolang/' + id;
     }
   }
 }

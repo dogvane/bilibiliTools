@@ -146,20 +146,33 @@ namespace 弹幕合并.Bussiness
 
                     var preLine = ret.jsonObj.Battutas[i - 1];
                     var firstWord = line.Text.Split(' ').FirstOrDefault();
-					var lineLength = line.Text.Length;
-                    line.Text = line.Text.Remove(0, firstWord.Length + 1);
-                    preLine.Text += " " + firstWord;
+                    if (firstWord == line.Text)
+                    {
+                        // 提升会导致自己的数据被删除
+                        line.Text = string.Empty;
+                        preLine.Text += " " + firstWord;
+                        preLine.Trans = api.GetTransResult3(preLine.Text, "en", "zh");
+                        preLine.To = line.From;
+                        ret.jsonObj.Battutas.RemoveAt(i);
+                        return (null, new[] { line, preLine });
+                    }
+                    else
+                    {
+                        var lineLength = line.Text.Length;
+                        line.Text = line.Text.Remove(0, firstWord.Length + 1);
+                        preLine.Text += " " + firstWord;
 
-                    preLine.Trans = api.GetTransResult3(preLine.Text, "en", "zh");
-                    line.Trans = api.GetTransResult3(line.Text, "en", "zh");
+                        preLine.Trans = api.GetTransResult3(preLine.Text, "en", "zh");
+                        line.Trans = api.GetTransResult3(line.Text, "en", "zh");
 
-					var sec = line.Duration * (1- line.Text.Length * 1.0 / lineLength); // 目前先按照字符长度等比例减少时间的值
-					Console.WriteLine("up sec {0}", sec);
-					preLine.To = TimeSpan.FromSeconds(preLine.ToSec + sec).ToString(@"hh\:mm\:ss\,fff");
-					line.From = preLine.To;
+                        var sec = line.Duration * (1 - line.Text.Length * 1.0 / lineLength); // 目前先按照字符长度等比例减少时间的值
+                        Console.WriteLine("up sec {0}", sec);
+                        preLine.To = TimeSpan.FromSeconds(preLine.ToSec + sec).ToString(@"hh\:mm\:ss\,fff");
+                        line.From = preLine.To;
 
-                    File.WriteAllText(ret.srtFile.JsonSrtFileName, JsonConvert.SerializeObject(ret.jsonObj));
-                    return (null, new[] {line, preLine});
+                        File.WriteAllText(ret.srtFile.JsonSrtFileName, JsonConvert.SerializeObject(ret.jsonObj));
+                        return (null, new[] {line, preLine});
+                    }
                 }
             }
 
@@ -182,20 +195,33 @@ namespace 弹幕合并.Bussiness
 
                     var nextLine = ret.jsonObj.Battutas[i + 1];
                     var lastWord = line.Text.Split(' ').LastOrDefault();
-					var lineLength = line.Text.Length;
-                    line.Text = line.Text.Remove(line.Text.Length - lastWord.Length - 1, lastWord.Length + 1);
-                    nextLine.Text = lastWord + " " + nextLine.Text;
+                    if (lastWord == line.Text)
+                    {
+                        // 下降会导致当前行被删除
+                        line.Text = string.Empty;
+                        nextLine.Text = lastWord + " " + nextLine.Text;
+                        nextLine.Trans = api.GetTransResult3(nextLine.Text, "en", "zh");
+                        nextLine.From = line.To;
+                        ret.jsonObj.Battutas.RemoveAt(i);
+                        return (null, new[] { line, nextLine });
+                    }
+                    else
+                    {
+                        var lineLength = line.Text.Length;
+                        line.Text = line.Text.Remove(line.Text.Length - lastWord.Length - 1, lastWord.Length + 1);
+                        nextLine.Text = lastWord + " " + nextLine.Text;
 
-                    nextLine.Trans = api.GetTransResult3(nextLine.Text, "en", "zh");
-                    line.Trans = api.GetTransResult3(line.Text, "en", "zh");
+                        nextLine.Trans = api.GetTransResult3(nextLine.Text, "en", "zh");
+                        line.Trans = api.GetTransResult3(line.Text, "en", "zh");
 
-					var sec = line.Duration * (1 - line.Text.Length * 1.0 / lineLength); // 目前先按照字符长度等比例减少时间的值
-					Console.WriteLine("down sec {0}", sec);
-					line.To = TimeSpan.FromSeconds(line.ToSec - sec).ToString(@"hh\:mm\:ss\,fff");
-					nextLine.From = line.To;
-					
-                    File.WriteAllText(ret.srtFile.JsonSrtFileName, JsonConvert.SerializeObject(ret.jsonObj));
-                    return (null, new[] { line, nextLine });
+                        var sec = line.Duration * (1 - line.Text.Length * 1.0 / lineLength); // 目前先按照字符长度等比例减少时间的值
+                        Console.WriteLine("down sec {0}", sec);
+                        line.To = TimeSpan.FromSeconds(line.ToSec - sec).ToString(@"hh\:mm\:ss\,fff");
+                        nextLine.From = line.To;
+
+                        File.WriteAllText(ret.srtFile.JsonSrtFileName, JsonConvert.SerializeObject(ret.jsonObj));
+                        return (null, new[] {line, nextLine});
+                    }
                 }
             }
 

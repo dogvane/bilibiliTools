@@ -38,5 +38,21 @@ namespace 弹幕合并.Bussiness.Entity
 
             return sb.ToString();
         }
+
+        /// <summary>
+        /// 生成导出翻译的数据
+        /// </summary>
+        /// <returns></returns>
+        public string GetTwoLangData()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine(Id.ToString());
+            sb.AppendFormat("{0} --> {1}", From, To).AppendLine();
+            sb.AppendLine(Text);
+            sb.AppendLine(Trans);
+
+            return sb.ToString();
+        }
     }
 }

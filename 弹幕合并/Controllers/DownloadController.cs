@@ -44,5 +44,29 @@ namespace 弹幕合并.Controllers
             }
             return File(Encoding.UTF8.GetBytes("no find srt " + id), "txt/srt", Path.GetFileName("error.log"));
         }
+
+        /// <summary>
+        /// 下载中英文的字幕
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [HttpPost]
+        public IActionResult DownloadTwoLang(int id)
+        {
+            var srtdata = SrtController.bu.GetSrt(UserId, id);
+            if (string.IsNullOrEmpty(srtdata.error))
+            {
+                StringBuilder writer = new StringBuilder();
+                foreach (var item in srtdata.jsonObj.Battutas)
+                {
+                    writer.AppendLine(item.GetTwoLangData());
+                }
+
+                var bytes = Encoding.UTF8.GetBytes(writer.ToString());
+                return File(bytes, "text/srt", "(中英文)" + srtdata.jsonObj.FileName);
+            }
+            return File(Encoding.UTF8.GetBytes("no find srt " + id), "txt/srt", Path.GetFileName("error.log"));
+        }
     }
 }

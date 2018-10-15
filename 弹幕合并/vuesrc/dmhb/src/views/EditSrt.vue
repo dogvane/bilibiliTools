@@ -3,7 +3,7 @@
       <h1>编辑字幕</h1>
       <p>{{ srt.fileName }}</p>
   <div class="main">
-          <table>
+          <table class="tbcontent">
               <tr  v-for="item in srtlines" :key='item.id'>
                   <td v-show="!mobile">
                   {{ item.from}} => {{item.to}}<br> ({{ item.duration}})
@@ -36,7 +36,14 @@ button
 {
     margin: 5px;
 }
-
+.tbcontent
+{
+    border-collapse:collapse;
+}
+.tbcontent tr
+{
+    border-bottom: 1px silver solid;
+}
 </style>
 
 <script>
@@ -84,11 +91,15 @@ export default {
                 { 
                     let item = that.srtlines[i];
                     if(item.id == changeItem.id){
-                        item.trans = changeItem.trans;
-                        item.text = changeItem.text;
-                        item.from = changeItem.from;
-                        item.to = changeItem.to;
-                        item.duration = changeItem.duration;
+                        if(changeItem.text == '')
+                        {
+                            // 这个是删除
+                            that.srtlines.splice(i, 1);
+                        }
+                        else
+                        {
+                            that.srtlines.splice(i, 1, changeItem);
+                        }
                         break;
                     }
                 }
