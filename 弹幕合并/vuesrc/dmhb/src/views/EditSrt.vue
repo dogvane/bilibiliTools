@@ -124,13 +124,13 @@ export default {
    onUp(id){
        let srtid = this.$route.params.srtId;
        //this.transids.push(id);
-       lodash.delay(this.onTrans2, 2000);
+       lodash.delay(this.onTrans2, 3500);
        webapi.srtUp(srtid, id).then(this.onChangeItem).then(this.pushTransIds);
    },
    onDown(id){
        let srtid = this.$route.params.srtId;
        //this.transids.push(id);
-       lodash.delay(this.onTrans2, 2000);
+       lodash.delay(this.onTrans2, 3500);
        webapi.srtDown(srtid, id).then(this.onChangeItem).then(this.pushTransIds);
    },
    onTrans(id){
