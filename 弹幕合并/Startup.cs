@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using BaiduFanyi;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
+using NLog;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace 弹幕合并
@@ -27,6 +31,27 @@ namespace 弹幕合并
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var key = Configuration["SecurityKey"]; // 你的加密key，可以配置文件里写，也可以另外找地方保存
+            //Logger.Info("SecurityKey {0}", key);
+
+            //添加jwt验证：
+            services.AddAuthentication(options => {
+                //认证middleware配置
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options => {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true, //是否验证Issuer
+                    ValidateAudience = true, //是否验证Audience
+                    ValidateLifetime = false, //是否验证失效时间
+                    ValidateIssuerSigningKey = true, //是否验证SecurityKey
+                    ValidAudience = "chsarptools.com", //Audience
+                    ValidIssuer = "chsarptools.com", //Issuer，这两项和前面签发jwt的设置一致
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)) //拿到SecurityKey
+                };
+            });
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.

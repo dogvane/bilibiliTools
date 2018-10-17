@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NETCore.Encrypt;
 using 弹幕合并.Models;
 
 namespace 弹幕合并.Controllers
@@ -23,6 +24,8 @@ namespace 弹幕合并.Controllers
 
         public IActionResult Index()
         {
+            // 密码加密
+            EncryptProvider.Sha256("123");
             return View("Index");
         }
 

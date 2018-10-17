@@ -91,6 +91,23 @@ namespace 弹幕合并.Controllers
         }
 
         /// <summary>
+        /// 翻译字幕
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("api/srt/srtTrans2")]
+        public ServerReturn SrtTrans(int srtId, string ids)
+        {
+            var id = ids.Split(',').Select(int.Parse).ToArray();
+            var ret = bu.SrtTrans2(UserId, srtId, id);
+            if (!string.IsNullOrEmpty(ret.error))
+            {
+                return new ServerReturn { error = -1, error_msg = ret.error };
+            }
+            return new ServerReturn { data = ret.battuta };
+        }
+
+        /// <summary>
         /// 将首单词提升到上一句的末尾
         /// </summary>
         /// <returns></returns>

@@ -48,6 +48,7 @@ button
 
 <script>
 import webapi from '../api/webapi.js'
+let lodash = require('lodash')
 
 export default {
   components: {
@@ -56,7 +57,8 @@ export default {
     return {
         mobile:false,
         srt:{},
-        srtlines:[]
+        srtlines:[],
+        transids:[],
     }
   },
   created(){
@@ -87,38 +89,63 @@ export default {
       onChangeItem(result){
           console.log('onChangeItem');
           const that = this;
+            if(result.data && result.data.data && result.data.data.length > 0) {
+                result.data.data.forEach(changeItem => {
+                    for(var i=0 ;i < that.srtlines.length; i++)
+                    { 
+                        let item = that.srtlines[i];
+                        if(item.id == changeItem.id){
+                            if(changeItem.text == '')
+                            {
+                                // 这个是删除
+                                that.srtlines.splice(i, 1);
+                            }
+                            else
+                            {
+                                that.srtlines.splice(i, 1, changeItem);
+                            }
+                            break;
+                        }
+                    }
+                });
+            }
+        return result;
+      },
+      pushTransIds(result)
+      {
+          console.log('onChangeItem');
+          const that = this;
         if(result.data && result.data.data && result.data.data.length > 0) {
             result.data.data.forEach(changeItem => {
-                for(var i=0 ;i < that.srtlines.length; i++)
-                { 
-                    let item = that.srtlines[i];
-                    if(item.id == changeItem.id){
-                        if(changeItem.text == '')
-                        {
-                            // 这个是删除
-                            that.srtlines.splice(i, 1);
-                        }
-                        else
-                        {
-                            that.srtlines.splice(i, 1, changeItem);
-                        }
-                        break;
-                    }
-                }
+                that.transids.push(changeItem.id);
             });
         }
       },
    onUp(id){
        let srtid = this.$route.params.srtId;
-       webapi.srtUp(srtid, id).then(this.onChangeItem);
+       //this.transids.push(id);
+       lodash.delay(this.onTrans2, 2000);
+       webapi.srtUp(srtid, id).then(this.onChangeItem).then(this.pushTransIds);
    },
    onDown(id){
        let srtid = this.$route.params.srtId;
-       webapi.srtDown(srtid, id).then(this.onChangeItem);
+       //this.transids.push(id);
+       lodash.delay(this.onTrans2, 2000);
+       webapi.srtDown(srtid, id).then(this.onChangeItem).then(this.pushTransIds);
    },
    onTrans(id){
        let srtid = this.$route.params.srtId;
        webapi.srtTrans(srtid, id).then(this.onChangeItem);
+   },
+   onTrans2(){
+       let ids = this.transids;
+       let srtid = this.$route.params.srtId;
+       this.transids = [];
+       if(ids.length > 0)
+       {
+           console.log("begin trans2");
+            webapi.srtTrans2(srtid, ids).then(this.onChangeItem);
+       }
    }
   }
 }

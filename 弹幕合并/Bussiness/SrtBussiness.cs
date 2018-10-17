@@ -123,6 +123,29 @@ namespace 弹幕合并.Bussiness
             return (null, new[] {line});
         }
 
+        public (string error, TransBattuta[] battuta) SrtTrans2(int userId, int srtId, int[] ids)
+        {
+            var ret = GetSrt(userId, srtId);
+            if (ret.error != null)
+                return (ret.error, null);
+            List<TransBattuta> rettb = new List<TransBattuta>();
+
+            foreach (var id in ids)
+            {
+                var line = ret.jsonObj.Battutas.FirstOrDefault(o => o.Id == id);
+                if (line == null || rettb.Any(o=>o.Id == id))
+                {
+                    continue;
+                }
+
+                line.Trans = api.GetTransResult3(line.Text, "en", "zh");
+                rettb.Add(line);
+            }
+
+            File.WriteAllText(ret.srtFile.JsonSrtFileName, JsonConvert.SerializeObject(ret.jsonObj));
+            return (null, rettb.ToArray());
+        }
+
         /// <summary>
         /// 将当行的首单词，放到上一行的结尾
         /// </summary>
@@ -162,8 +185,8 @@ namespace 弹幕合并.Bussiness
                         line.Text = line.Text.Remove(0, firstWord.Length + 1);
                         preLine.Text += " " + firstWord;
 
-                        preLine.Trans = api.GetTransResult3(preLine.Text, "en", "zh");
-                        line.Trans = api.GetTransResult3(line.Text, "en", "zh");
+                        //preLine.Trans = api.GetTransResult3(preLine.Text, "en", "zh");
+                        //line.Trans = api.GetTransResult3(line.Text, "en", "zh");
 
                         var sec = line.Duration * (1 - line.Text.Length * 1.0 / lineLength); // 目前先按照字符长度等比例减少时间的值
                         Console.WriteLine("up sec {0}", sec);
@@ -211,8 +234,8 @@ namespace 弹幕合并.Bussiness
                         line.Text = line.Text.Remove(line.Text.Length - lastWord.Length - 1, lastWord.Length + 1);
                         nextLine.Text = lastWord + " " + nextLine.Text;
 
-                        nextLine.Trans = api.GetTransResult3(nextLine.Text, "en", "zh");
-                        line.Trans = api.GetTransResult3(line.Text, "en", "zh");
+                        //nextLine.Trans = api.GetTransResult3(nextLine.Text, "en", "zh");
+                        //line.Trans = api.GetTransResult3(line.Text, "en", "zh");
 
                         var sec = line.Duration * (1 - line.Text.Length * 1.0 / lineLength); // 目前先按照字符长度等比例减少时间的值
                         Console.WriteLine("down sec {0}", sec);

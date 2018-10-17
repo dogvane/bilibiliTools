@@ -47,6 +47,15 @@ const webapi = {
         });
         return ret;
     },
+    srtTrans2(srtId, id) {
+        var ret = axios.post(`/api/srt/srtTrans2/?srtId=` + srtId + "&ids=" + id.join(','));
+        ret.then(response => {
+            console.log(response.data);
+        }).catch(error => {
+            console.log(error);
+        });
+        return ret;
+    },
     deleteSrt(srtId) {
         var ret = axios.post(`/api/srt/deleteSrt/?srtId=` + srtId);
         ret.then(response => {
