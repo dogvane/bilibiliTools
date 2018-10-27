@@ -106,6 +106,63 @@ namespace 弹幕合并.Bussiness
 
         private static Dictionary<int, SrtJsonFile> jsonFileCache = new Dictionary<int, SrtJsonFile>();
 
+        /// <summary>
+        /// 更新一个用户自己的翻译
+        /// </summary>
+        /// <param name="userId">用户id</param>
+        /// <param name="srtId">字幕文件id</param>
+        /// <param name="id">字幕编号</param>
+        /// <param name="trans">翻译内容</param>
+        /// <returns></returns>
+        public (string error, TransBattuta[] battuta) UpdateTrans(int userId, int srtId, int id, string trans)
+        {
+            var ret = GetSrt(userId, srtId);
+            if (ret.error != null)
+                return (ret.error, null);
+
+            var line = ret.jsonObj.Battutas.FirstOrDefault(o => o.Id == id);
+            if (line == null)
+            {
+                return ($"{id} 行错误", null);
+            }
+
+            line.Trans2 = trans;
+            
+            File.WriteAllText(ret.srtFile.JsonSrtFileName, JsonConvert.SerializeObject(ret.jsonObj));
+            return (null, new[] { line });
+        }
+
+        /// <summary>
+        /// 更新字幕的原始值
+        /// </summary>
+        /// <param name="userId">用户id</param>
+        /// <param name="srtId">字幕文件id</param>
+        /// <param name="id">字幕编号</param>
+        /// <param name="text">翻译内容</param>
+        /// <returns></returns>
+        public (string error, TransBattuta[] battuta) UpdateSource(int userId, int srtId, int id, string text)
+        {
+            var ret = GetSrt(userId, srtId);
+            if (ret.error != null)
+                return (ret.error, null);
+
+            var line = ret.jsonObj.Battutas.FirstOrDefault(o => o.Id == id);
+            if (line == null)
+            {
+                return ($"{id} 行错误", null);
+            }
+
+            line.Text = text;
+
+            bool notTrnas = string.IsNullOrEmpty(line.Trans2) || line.Trans == line.Trans2;
+            line.Trans = api.GetTransResult3(line.Text, "en", "zh");
+            if (notTrnas)
+                line.Trans2 = line.Trans;
+
+            File.WriteAllText(ret.srtFile.JsonSrtFileName, JsonConvert.SerializeObject(ret.jsonObj));
+            return (null, new[] { line });
+        }
+
         public (string error, TransBattuta[] battuta) SrtTrans(int userId, int srtId, int id)
         {
             var ret = GetSrt(userId, srtId);
@@ -118,7 +175,11 @@ namespace 弹幕合并.Bussiness
                 return ($"{id} 行错误", null);
             }
 
+            bool notTrnas = string.IsNullOrEmpty(line.Trans2) || line.Trans == line.Trans2;
             line.Trans = api.GetTransResult3(line.Text, "en", "zh");
+            if (notTrnas)
+                line.Trans2 = line.Trans;
+
             File.WriteAllText(ret.srtFile.JsonSrtFileName, JsonConvert.SerializeObject(ret.jsonObj));
             return (null, new[] {line});
         }
@@ -138,7 +199,11 @@ namespace 弹幕合并.Bussiness
                     continue;
                 }
 
+                bool notTrnas = string.IsNullOrEmpty(line.Trans2) || line.Trans == line.Trans2;
                 line.Trans = api.GetTransResult3(line.Text, "en", "zh");
+                if (notTrnas)
+                    line.Trans2 = line.Trans;
+
                 rettb.Add(line);
             }
 

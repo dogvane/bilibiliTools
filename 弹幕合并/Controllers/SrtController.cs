@@ -108,6 +108,48 @@ namespace 弹幕合并.Controllers
         }
 
         /// <summary>
+        /// 用户翻译自己的字幕
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("api/srt/updateTrans")]
+        public ServerReturn SrtTrans(postSource post)
+        {
+            var ret = bu.UpdateTrans(UserId, post.srtId, post.id, post.text);
+            if (!string.IsNullOrEmpty(ret.error))
+            {
+                return new ServerReturn { error = -1, error_msg = ret.error };
+            }
+            return new ServerReturn { data = ret.battuta };
+        }
+
+        public class postSource
+        {
+            public int srtId { get; set; }
+
+            public int id { get; set; }
+
+            public string text { get; set; }
+        }
+
+        /// <summary>
+        /// 更新字幕的原始值
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("api/srt/updateSource")]
+        public ServerReturn SrtUpdateSource(postSource post)
+        {
+            var ret = bu.UpdateSource(UserId, post.srtId, post.id, post.text);
+            if (!string.IsNullOrEmpty(ret.error))
+            {
+                return new ServerReturn { error = -1, error_msg = ret.error };
+            }
+            return new ServerReturn { data = ret.battuta };
+        }
+
+
+        /// <summary>
         /// 将首单词提升到上一句的末尾
         /// </summary>
         /// <returns></returns>
@@ -140,7 +182,7 @@ namespace 弹幕合并.Controllers
         }
 
         /// <summary>
-        /// 将结尾的单词放到下一句的首字母里
+        /// 删除一个字幕
         /// </summary>
         /// <returns></returns>
         [HttpPost]

@@ -76,7 +76,7 @@ namespace BaiduFanyi
                 sb.Append(' ');
             }
 
-            return sb.ToString();
+            return sb.ToString().Trim();
         }
 
 

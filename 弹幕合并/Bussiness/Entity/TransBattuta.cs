@@ -25,6 +25,11 @@ namespace 弹幕合并.Bussiness.Entity
         public string Trans { get; set; }
 
         /// <summary>
+        /// 人工翻译的内容
+        /// </summary>
+        public string Trans2 { get; set; }
+
+        /// <summary>
         /// 生成导出翻译的数据
         /// </summary>
         /// <returns></returns>
@@ -34,7 +39,10 @@ namespace 弹幕合并.Bussiness.Entity
 
             sb.AppendLine(Id.ToString());
             sb.AppendFormat("{0} --> {1}", From, To).AppendLine();
-            sb.AppendLine(Trans);
+            if (string.IsNullOrEmpty(Trans2))
+                sb.AppendLine(Trans);
+            else
+                sb.Append(Trans2);
 
             return sb.ToString();
         }
