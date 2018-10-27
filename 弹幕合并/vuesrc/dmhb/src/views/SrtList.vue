@@ -8,6 +8,7 @@
         <span>
           <button @click='onedit(srtfile.id, false)'>编辑</button>
           <button @click='onedit(srtfile.id, true)'>手机编辑</button>
+          <button @click='onTrans(srtfile.id, true)'>人工翻译字幕</button>
           <button @click='ondelete(srtfile.id)'>删除</button>
           <button @click='ondownload(srtfile.id)'>下载</button>
           <button @click='ondownload2(srtfile.id)'>下载中文</button>
@@ -58,6 +59,9 @@ export default {
     onedit(id, mobile){
       // this.$router.push({ name: 'editsrt', params: { srtId:id, mobile }})
       this.$router.push({ path: '/editsrt/' + id + "/" + mobile})
+    },
+    onTrans(id){
+      this.$router.push({ path: '/transsrt/' + id})
     },
     ondelete(id){
       if(confirm('是否要删除？')){

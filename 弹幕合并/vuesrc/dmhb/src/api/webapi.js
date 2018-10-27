@@ -63,8 +63,29 @@ const webapi = {
         }).catch(error => {
             console.log(error);
         });
+
         return ret;
-    }
+    },
+    updateSource(srtId, id, text) {
+        var data = { srtId, id, text };
+        var ret = axios.post(`/api/srt/updateSource/`, data);
+        ret.then(response => {
+            console.log(response.data);
+        }).catch(error => {
+            console.log(error);
+        });
+        return ret;
+    },
+    updateTrans(srtId, id, text) {
+        var data = { srtId, id, text };
+        var ret = axios.post(`/api/srt/updateTrans/`, data);
+        ret.then(response => {
+            console.log(response.data);
+        }).catch(error => {
+            console.log(error);
+        });
+        return ret;
+    },
 };
 
 export default webapi;
