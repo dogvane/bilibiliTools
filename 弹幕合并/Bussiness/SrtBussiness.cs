@@ -163,6 +163,40 @@ namespace 弹幕合并.Bussiness
             return (null, new[] { line });
         }
 
+        /// <summary>
+        /// 更新字幕的原始值
+        /// </summary>
+        /// <param name="userId">用户id</param>
+        /// <param name="srtId">字幕文件id</param>
+        /// <param name="source">搜索的字符串</param>
+        /// <param name="replace">目标字符串</param>
+        /// <returns></returns>
+        public (string error, TransBattuta[] battuta) ReplaceSource(int userId, int srtId, string source, string replace)
+        {
+            var ret = GetSrt(userId, srtId);
+            if (ret.error != null)
+                return (ret.error, null);
+
+            List<TransBattuta> retDatas = new List<TransBattuta>();
+
+            foreach (var line in ret.jsonObj.Battutas)
+            {
+                if (line.Text.IndexOf(source) > -1)
+                {
+                    line.Text = line.Text.Replace(source, replace);
+
+                    bool notTrnas = string.IsNullOrEmpty(line.Trans2) || line.Trans == line.Trans2;
+                    line.Trans = api.GetTransResult3(line.Text, "en", "zh");
+                    if (notTrnas)
+                        line.Trans2 = line.Trans;
+                    retDatas.Add(line);
+                }
+            }
+
+            File.WriteAllText(ret.srtFile.JsonSrtFileName, JsonConvert.SerializeObject(ret.jsonObj));
+            return (null, retDatas.ToArray());
+        }
+
         public (string error, TransBattuta[] battuta) SrtTrans(int userId, int srtId, int id)
         {
             var ret = GetSrt(userId, srtId);

@@ -130,6 +130,8 @@ namespace 弹幕合并.Controllers
             public int id { get; set; }
 
             public string text { get; set; }
+
+            public string replace { get; set; }
         }
 
         /// <summary>
@@ -148,6 +150,21 @@ namespace 弹幕合并.Controllers
             return new ServerReturn { data = ret.battuta };
         }
 
+        /// <summary>
+        /// 原始字幕搜索并替换操作
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("api/srt/replaceSource")]
+        public ServerReturn SrtReplaceSource(postSource post)
+        {
+            var ret = bu.ReplaceSource(UserId, post.srtId, post.text, post.replace);
+            if (!string.IsNullOrEmpty(ret.error))
+            {
+                return new ServerReturn { error = -1, error_msg = ret.error };
+            }
+            return new ServerReturn { data = ret.battuta };
+        }
 
         /// <summary>
         /// 将首单词提升到上一句的末尾
