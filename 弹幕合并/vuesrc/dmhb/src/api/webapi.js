@@ -76,6 +76,16 @@ const webapi = {
         });
         return ret;
     },
+    replaceSource(srtId, text, replace) {
+        var data = { srtId, replace, text };
+        var ret = axios.post(`/api/srt/replaceSource/`, data);
+        ret.then(response => {
+            console.log(response.data);
+        }).catch(error => {
+            console.log(error);
+        });
+        return ret;
+    },
     updateTrans(srtId, id, text) {
         var data = { srtId, id, text };
         var ret = axios.post(`/api/srt/updateTrans/`, data);

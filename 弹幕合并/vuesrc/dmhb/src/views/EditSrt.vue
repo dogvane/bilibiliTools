@@ -1,48 +1,53 @@
 <template>
-  <div class="home">
-      <h1>编辑字幕</h1>
-      <p>{{ srt.fileName }}</p>
-  <div class="main">
-          <table class="tbcontent">
-              <tr  v-for="item in srtlines" :key='item.id'>
-                  <td v-show="!mobile">
-                  {{ item.from}} => {{item.to}}<br> ({{ item.duration}})
-                  </td>
-                  <td>
-                      {{ item.text }}
-                      <br>
-                      {{ item.trans }}
-                  </td>
-                  <td>
-          <button @click="onUp(item.id)">Up</button> 
-            <button @click="onDown(item.id)">Down</button>
-            <button @click="onTrans(item.id)">Trans</button>
-                  </td>
-              </tr>
-          </table>
-  </div>
-  </div>
+    <div class="home">
+        <h1>编辑字幕</h1>
+        <p>{{ srt.fileName }}</p>
+        <div class="main">
+            <table class="tbcontent">
+                <tr v-for="item in srtlines" :key='item.id'>
+                    <td v-show="!mobile">
+                        {{ item.from}} => {{item.to}}<br> ({{ item.duration}})
+                    </td>
+                    <td>
+                        {{ item.text }}
+                        <br>
+                        {{ item.trans }}
+                    </td>
+                    <td>
+                        <button @click="onUp(item.id)">Up</button>
+                        <button @click="onDown(item.id)">Down</button>
+                        <button @click="onTrans(item.id)">Trans</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div style="width:400px;height:300px;position: fixed; right:40px; top:100px;">
+            <textarea type="text" class='usertrans' v-model="replaceSource" @blur="onTotalSource()" />
+            <textarea type="text" class='usertrans' v-model="replaceData" />
+            <button  v-bind:disabled = 'replacing' @click="onReplace()">替换{{ includeCount > 0 ? '(' + includeCount +')':''}}</button>
+        </div>
+    </div>
 </template>
 
 <style>
-
-.rightTitle
-{
-    width:200px;
-    text-align:right;
-    padding-right:10px;
+.rightTitle {
+  width: 200px;
+  text-align: right;
+  padding-right: 10px;
 }
-button
-{
-    margin: 5px;
+button {
+  margin: 5px;
 }
-.tbcontent
-{
-    border-collapse:collapse;
+.tbcontent {
+  border-collapse: collapse;
 }
-.tbcontent tr
-{
-    border-bottom: 1px silver solid;
+.tbcontent tr {
+  border-bottom: 1px silver solid;
+}
+.usertrans {
+  width: 160px;
+  height: 2em;
+  margin: 5px;
 }
 </style>
 
@@ -51,57 +56,56 @@ import webapi from '../api/webapi.js'
 let lodash = require('lodash')
 
 export default {
-  components: {
-  },
-  data() {
-    return {
-        mobile:false,
-        srt:{},
-        srtlines:[],
-        transids:[],
-    }
-  },
-  created(){
-      console.log('on edit', this.$route.params);
-      
-      let srtId = this.$route.params.srtId;
-      if(this.$route.params.mobile)
-        this.mobile = true;
+    components: {
+    },
+    data () {
+        return {
+            mobile: false,
+            srt: {},
+            srtlines: [],
+            transids: [],
+            replaceSource: '',
+            replaceData: '',
+            includeCount: 0,
+            replacing: false
+        }
+    },
+    created () {
+        console.log('on edit', this.$route.params);
 
-      if(srtId == 0 || srtId == undefined)
-      {
-          console.log('传参错误');
-          this.$router.replace('/');
-          return;
-      }
+        let srtId = this.$route.params.srtId;
+        if (this.$route.params.mobile)
+            this.mobile = true;
 
-    const that = this;
-    webapi.getSrt(srtId).then(result=>{
-      console.log(result.data);
-      if(result.data && result.data.data)
-      {
-        that.srt = result.data.data;
-        that.srtlines = that.srt.battutas;
-      }
-    });
-  },
-  methods: {
-      onChangeItem(result){
-          console.log('onChangeItem');
-          const that = this;
-            if(result.data && result.data.data && result.data.data.length > 0) {
+        if (srtId == 0 || srtId == undefined) {
+            console.log('传参错误');
+            this.$router.replace('/');
+            return;
+        }
+
+        const that = this;
+        webapi.getSrt(srtId).then(result => {
+            console.log(result.data);
+            if (result.data && result.data.data) {
+                that.srt = result.data.data;
+                that.srtlines = that.srt.battutas;
+            }
+        });
+    },
+    methods: {
+        onChangeItem (result) {
+            console.log('onChangeItem');
+            const that = this;
+            if (result.data && result.data.data && result.data.data.length > 0) {
                 result.data.data.forEach(changeItem => {
-                    for(var i=0 ;i < that.srtlines.length; i++)
-                    { 
+                    for (var i = 0; i < that.srtlines.length; i++) {
                         let item = that.srtlines[i];
-                        if(item.id == changeItem.id){
-                            if(changeItem.text == '')
-                            {
+                        if (item.id == changeItem.id) {
+                            if (changeItem.text == '') {
                                 // 这个是删除
                                 that.srtlines.splice(i, 1);
                             }
-                            else
-                            {
+                            else {
                                 that.srtlines.splice(i, 1, changeItem);
                             }
                             break;
@@ -109,44 +113,58 @@ export default {
                     }
                 });
             }
-        return result;
-      },
-      pushTransIds(result)
-      {
-          console.log('onChangeItem');
-          const that = this;
-        if(result.data && result.data.data && result.data.data.length > 0) {
-            result.data.data.forEach(changeItem => {
-                that.transids.push(changeItem.id);
-            });
+            return result;
+        },
+        pushTransIds (result) {
+            console.log('onChangeItem');
+            const that = this;
+            if (result.data && result.data.data && result.data.data.length > 0) {
+                result.data.data.forEach(changeItem => {
+                    that.transids.push(changeItem.id);
+                });
+            }
+        },
+        onUp (id) {
+            let srtid = this.$route.params.srtId;
+            //this.transids.push(id);
+            lodash.delay(this.onTrans2, 3500);
+            webapi.srtUp(srtid, id).then(this.onChangeItem).then(this.pushTransIds);
+        },
+        onDown (id) {
+            let srtid = this.$route.params.srtId;
+            //this.transids.push(id);
+            lodash.delay(this.onTrans2, 3500);
+            webapi.srtDown(srtid, id).then(this.onChangeItem).then(this.pushTransIds);
+        },
+        onTrans (id) {
+            let srtid = this.$route.params.srtId;
+            webapi.srtTrans(srtid, id).then(this.onChangeItem);
+        },
+        onTrans2 () {
+            let ids = this.transids;
+            let srtid = this.$route.params.srtId;
+            this.transids = [];
+            if (ids.length > 0) {
+                webapi.srtTrans2(srtid, ids).then(this.onChangeItem);
+            }
+        },
+        onTotalSource () {
+            var includes = this.srtlines.filter(o => o.text.includes(this.replaceSource));
+            this.includeCount = includes.length;
+        },
+        onReplace () {
+            let srtid = this.$route.params.srtId;
+            if (this.replaceSource.length > 0 && this.replaceData.length > 0) {
+                this.replacing = true;
+                webapi.replaceSource(srtid, this.replaceSource, this.replaceData)
+                    .then(this.onChangeItem).then(() => {
+                        this.replaceSource = '';
+                        this.replaceData = '';
+                        this.includeCount = 0;
+                        this.replacing = false;
+                    });
+            }
         }
-      },
-   onUp(id){
-       let srtid = this.$route.params.srtId;
-       //this.transids.push(id);
-       lodash.delay(this.onTrans2, 3500);
-       webapi.srtUp(srtid, id).then(this.onChangeItem).then(this.pushTransIds);
-   },
-   onDown(id){
-       let srtid = this.$route.params.srtId;
-       //this.transids.push(id);
-       lodash.delay(this.onTrans2, 3500);
-       webapi.srtDown(srtid, id).then(this.onChangeItem).then(this.pushTransIds);
-   },
-   onTrans(id){
-       let srtid = this.$route.params.srtId;
-       webapi.srtTrans(srtid, id).then(this.onChangeItem);
-   },
-   onTrans2(){
-       let ids = this.transids;
-       let srtid = this.$route.params.srtId;
-       this.transids = [];
-       if(ids.length > 0)
-       {
-           console.log("begin trans2");
-            webapi.srtTrans2(srtid, ids).then(this.onChangeItem);
-       }
-   }
-  }
+    }
 }
 </script>

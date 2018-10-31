@@ -20,14 +20,14 @@
 </template>
 
 <style scoped>
-.title{
+.title {
   padding: 0px 10px;
 }
-.time{
+.time {
   padding: 0px 10px;
 }
-button{
-  padding:0px 10px;
+button {
+  padding: 0px 10px;
 }
 </style>
 
@@ -38,51 +38,50 @@ import webapi from '../api/webapi.js'
 export default {
   name: 'srtlist',
   components: {
-  },data(){
+  }, data () {
     return {
-      srtFiles:[]
+      srtFiles: []
     };
   },
-  created(){
-    
+  created () {
+
     const that = this;
-    webapi.getSrtList().then(result=>{
+    webapi.getSrtList().then(result => {
       console.log(that);
-      if(result.data && result.data.data)
-      {
+      if (result.data && result.data.data) {
         that.srtFiles = result.data.data;
       }
     });
   },
   methods:
-  {
-    onedit(id, mobile){
-      // this.$router.push({ name: 'editsrt', params: { srtId:id, mobile }})
-      this.$router.push({ path: '/editsrt/' + id + "/" + mobile})
-    },
-    onTrans(id){
-      this.$router.push({ path: '/transsrt/' + id})
-    },
-    ondelete(id){
-      if(confirm('是否要删除？')){
-        const that = this;
-        webapi.deleteSrt(id).then(result=>{
-          console.log(this);
-          if(result.data.error == 0){
-            that.srtFiles = that.srtFiles.filter(o=>o.id != id);
-          }
-        });
-      }      
-    },
-    ondownload(id){
-      window.location.href = '../srt/download/' + id;
-    },
-    ondownload2(id){
-      window.location.href = '../srt/downloadtrans/' + id;
-    },
-    ondownload3(id){
-      window.location.href = '../srt/downloadtwolang/' + id;
+    {
+      onedit (id, mobile) {
+        // this.$router.push({ name: 'editsrt', params: { srtId:id, mobile }})
+        this.$router.push({ path: '/editsrt/' + id + "/" + mobile })
+      },
+      onTrans (id) {
+        this.$router.push({ path: '/transsrt/' + id })
+      },
+      ondelete (id) {
+        if (confirm('是否要删除？')) {
+          const that = this;
+          webapi.deleteSrt(id).then(result => {
+            console.log(this);
+            if (result.data.error == 0) {
+              that.srtFiles = that.srtFiles.filter(o => o.id != id);
+            }
+          });
+        }
+      },
+      ondownload (id) {
+        window.location.href = '../srt/download/' + id;
+      },
+      ondownload2 (id) {
+        window.location.href = '../srt/downloadtrans/' + id;
+      },
+      ondownload3 (id) {
+        window.location.href = '../srt/downloadtwolang/' + id;
+      }
     }
-  }
 }
 </script>
