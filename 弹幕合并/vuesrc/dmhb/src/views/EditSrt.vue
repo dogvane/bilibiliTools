@@ -5,7 +5,7 @@
         <div class="main">
             <table class="tbcontent">
                 <tr v-for="item in srtlines" :key='item.id'>
-                    <td v-show="!mobile">
+                    <td v-if="mobile === false">
                         {{ item.from}} => {{item.to}}<br> ({{ item.duration}})
                     </td>
                     <td>
@@ -21,7 +21,7 @@
                 </tr>
             </table>
         </div>
-        <div style="width:400px;height:300px;position: fixed; right:40px; top:100px;">
+        <div class="transbox" :style="mobile?'top:10px':'top:100px'">
             <textarea type="text" class='usertrans' v-model="replaceSource" @blur="onTotalSource()" />
             <textarea type="text" class='usertrans' v-model="replaceData" />
             <button  v-bind:disabled = 'replacing' @click="onReplace()">替换{{ includeCount > 0 ? '(' + includeCount +')':''}}</button>
@@ -30,6 +30,13 @@
 </template>
 
 <style>
+.transbox {
+  width: 400px;
+  height: 300px;
+  position: fixed;
+  right: 40px;
+}
+
 .rightTitle {
   width: 200px;
   text-align: right;
@@ -74,7 +81,7 @@ export default {
         console.log('on edit', this.$route.params);
 
         let srtId = this.$route.params.srtId;
-        if (this.$route.params.mobile)
+        if (this.$route.params.mobile == "true")
             this.mobile = true;
 
         if (srtId == 0 || srtId == undefined) {
@@ -127,13 +134,13 @@ export default {
         onUp (id) {
             let srtid = this.$route.params.srtId;
             //this.transids.push(id);
-            lodash.delay(this.onTrans2, 3500);
+            lodash.delay(this.onTrans2, 15000);
             webapi.srtUp(srtid, id).then(this.onChangeItem).then(this.pushTransIds);
         },
         onDown (id) {
             let srtid = this.$route.params.srtId;
             //this.transids.push(id);
-            lodash.delay(this.onTrans2, 3500);
+            lodash.delay(this.onTrans2, 15000);
             webapi.srtDown(srtid, id).then(this.onChangeItem).then(this.pushTransIds);
         },
         onTrans (id) {
