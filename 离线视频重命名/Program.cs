@@ -13,8 +13,8 @@ namespace 离线视频重命名
     {
         static void Main(string[] args)
         {
-            var path = @"C:\Users\Dogvane\Desktop\bilibili\download";
-            var outpath = @"H:\flvout";
+            var path = @"C:\zb\download";
+            var outpath = @"r:\";
             var entrys = Directory.GetFiles(path, "entry.json", SearchOption.AllDirectories);
             var batdata = new StringBuilder();
 
@@ -39,6 +39,8 @@ namespace 离线视频重命名
 
 
                 var blvs = fileInfo.Directory.GetFiles("*.blv", SearchOption.AllDirectories).ToList();
+                if (blvs.Count == 0)
+                    continue;
 
                 if (blvs.Count > 1)
                 {
