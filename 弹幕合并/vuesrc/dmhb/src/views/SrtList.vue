@@ -13,6 +13,7 @@
           <button @click='ondownload(srtfile.id)'>下载</button>
           <button @click='ondownload2(srtfile.id)'>下载中文</button>
           <button @click='ondownload3(srtfile.id)'>下载中英文</button>
+          <button @click='ondownload4(srtfile.id)'>下载b站弹幕</button>
         </span>
       </li>
     </ul>
@@ -81,6 +82,9 @@ export default {
       },
       ondownload3 (id) {
         window.location.href = '../srt/downloadtwolang/' + id;
+      },
+      ondownload4 (id) {
+        window.location.href = '../srt/DownloadBilibili/' + id;
       }
     }
 }
