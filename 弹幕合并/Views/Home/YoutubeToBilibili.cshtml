@@ -1,0 +1,29 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Youtube srt 字幕文件 转 bilibli 字幕文件</title>
+    <style  type="text/css">
+        .main {
+            width:700px;
+            margin: 60px auto;
+        }
+
+    </style>
+</head>
+<body>
+<div class="main">
+    <h2>Youtube srt 字幕文件 转 bilibli 字幕文件</h2>
+    <form action="~/Home/YoutubeSrtFileToBilibliFile" method="post" enctype="multipart/form-data">
+        <input type="file" name="updateFile" id="updateFile" multiple=""/>
+        <input type="submit" value="转换"/>
+    </form>
+</div>
+</body>
+</html>
