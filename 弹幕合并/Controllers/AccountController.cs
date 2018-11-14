@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using 弹幕合并.Bussiness;
 using 弹幕合并.Common;
 
 namespace 弹幕合并.Controllers
@@ -27,7 +28,8 @@ namespace 弹幕合并.Controllers
         /// <summary>
         /// 登陆的请求对象
         /// </summary>
-        public class LoginRequest {
+        public class LoginRequest
+        {
             /// <summary>
             /// 用户名
             /// </summary>
@@ -38,10 +40,13 @@ namespace 弹幕合并.Controllers
             /// </summary>
             public string pwd { get; set; }
 
-            public override string ToString () {
-                return string.Format ("{0} {1}", username, pwd);
+            public override string ToString()
+            {
+                return string.Format("{0} {1}", username, pwd);
             }
         }
+
+        public static AccountBussiness bu = new AccountBussiness();
 
         /// <summary>
         /// 登陆
@@ -53,14 +58,19 @@ namespace 弹幕合并.Controllers
         public ServerReturn Login (LoginRequest request) {
             Logger.Info("Login request {0}", request);
 
-            //var userid = BU.Account.CheckLogin (request.username, request.pwd);
-            var userid = 1; // 上面实现自己从数据库验证账户名和密码信息，返回用户id，可以是数字，也可以是字符串，看你的项目决定
-            if (userid == 0) {
-                return new ServerReturn {
-                error = 1,
-                error_msg = "用户名或者密码错误"
-                };
+            var account = bu.GetAccount(request.username);
+            if (account == null)
+            {
+                return new ServerReturn { error = 1, error_msg = "账号或者密码错误" };
             }
+
+            var pwd = NETCore.Encrypt.EncryptProvider.Sha256(request.username + request.pwd + "bilibilitools");
+            if (pwd != account.Pwd)
+            {
+                return new ServerReturn { error = 1, error_msg = "账号或者密码错误" };
+            }
+
+            var userid = account.Id;
 
             //   生成jwt令牌
             var claims = new [] {
@@ -100,16 +110,30 @@ namespace 弹幕合并.Controllers
 
         [HttpPost]
         [Authorize]
-        [Route ("api/bu/doyourtask")]
-        public ServerReturn DoYourTask()
+        [Route ("api/account/register")]
+        public ServerReturn Register(LoginRequest request)
         {
-            var userid = UserId;
+            if (string.IsNullOrEmpty(request.username))
+            {
+                return new ServerReturn {error = 1, error_msg = "用户名不能为空"};
+            }
 
-            Logger.Info($"DoYourTask userid:{userid}", userid);
+            if (string.IsNullOrEmpty(request.pwd))
+            {
+                return new ServerReturn { error = 1, error_msg = "密码" };
+            }
 
-            // todo 你的业务代码里可以使用userid查询用户信息了
+            var account = bu.GetAccount(request.username);
+            if (account != null)
+            {
+                return new ServerReturn {  error = 1, error_msg = "用户已存在"};
+            }
 
-            return new ServerReturn { data = "我叫执行成功" };
+            var pwd = NETCore.Encrypt.EncryptProvider.Sha256(request.username + request.pwd + "bilibilitools");
+
+            bu.Register(request.username, pwd);
+
+            return Login(request);
         }
     }
 }
