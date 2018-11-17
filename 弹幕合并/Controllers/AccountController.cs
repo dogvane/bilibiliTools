@@ -11,14 +11,44 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using 弹幕合并.Bussiness;
 using 弹幕合并.Common;
 
 namespace 弹幕合并.Controllers
 {
     /// <summary>
+    /// this class is for swagger to generate AuthToken Header filed on swagger UI
+    /// </summary>
+    public class AddAuthTokenHeaderParameter : IOperationFilter
+    {
+        public void Apply(Operation operation, OperationFilterContext context)
+        {
+            if (operation.Parameters == null)
+                operation.Parameters = new List<IParameter>();
+            //var attrs = context.ApiDescription.ActionAttributes();
+            //foreach (var attr in attrs)
+            {
+                // 如果 Attribute 是我们自定义的验证过滤器
+                //if (attr.GetType() == typeof(Auth))
+                {
+                    operation.Parameters.Add(new NonBodyParameter()
+                    {
+                        Name = "Authorization",
+                        In = "header",
+                        Type = "string",
+                        Required = false
+                    });
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// 权限验证
     /// </summary>
+    [ApiController]
     public class AccountController : BaseController {
         private readonly IConfiguration _configuration;
         public AccountController (IConfiguration configuration) : base () {
@@ -104,12 +134,9 @@ namespace 弹幕合并.Controllers
             var takenCode = new JwtSecurityTokenHandler ().WriteToken (token);
 
             return new ServerReturn { data = new { userid, token = takenCode } };
-
-            
         }
 
         [HttpPost]
-        [Authorize]
         [Route ("api/account/register")]
         public ServerReturn Register(LoginRequest request)
         {

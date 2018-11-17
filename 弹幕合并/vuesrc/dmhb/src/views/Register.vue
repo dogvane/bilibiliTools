@@ -7,9 +7,9 @@
             <span class="rightTitle">密码</span><input Type="password" class="inputbox" v-model="pwd" />
         </p>
         <p class="pl">
-            <button type="button" v-on:click="login()">登陆</button>
-            <router-link to="/register" class="register">注册</router-link>
+            <button type="button" v-on:click="register()">注册</button>
         </p>
+        <p>注意：请妥善保管好账号和密码，本系统没密码找回功能</p>
     </div>
 </template>
 
@@ -22,9 +22,6 @@
 .inputbox {
   width: 120px;
   text-align: left;
-}
-.register {
-  padding: 0px 20px;
 }
 </style>
 
@@ -45,7 +42,7 @@ export default {
         }
     },
     methods: {
-        login () {
+        register () {
             if (this.username == '' || this.pwd == '') {
                 alert('请输入用户名和密码');
                 return;
@@ -54,22 +51,19 @@ export default {
                 username: this.username,
                 pwd: this.pwd
             };
-            axios.post(`/api/account/login`, param,
+            axios.post(`/api/account/register`, param,
                 {
                 }).then(response => {
-
                     var err = response.data.error_msg;
                     if (err && err.length > 0) {
                         alert(error);
                         return;
                     }
 
-                    console.log('token', response.data.data.token);
-                    // 登录成功
                     localStorage.setItem("token", response.data.data.token);
                     this.$router.push({ path: '/srtlist' })
                 }).catch(error => {
-                    alert(error);
+                    console.log(error);
                 });
         },
     }

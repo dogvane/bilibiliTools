@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using 弹幕合并.Bussiness.Entity;
@@ -12,6 +13,7 @@ namespace 弹幕合并.Controllers
     {
         [HttpGet]
         [HttpPost]
+        [Authorize]
         public IActionResult Download(int id)
         {
             var srtdata = SrtController.bu.GetSrt(UserId, id);
@@ -31,6 +33,7 @@ namespace 弹幕合并.Controllers
 
         [HttpGet]
         [HttpPost]
+        [Authorize]
         public IActionResult DownloadTrans(int id)
         {
             var srtdata = SrtController.bu.GetSrt(UserId, id);
@@ -55,6 +58,7 @@ namespace 弹幕合并.Controllers
         /// <returns></returns>
         [HttpGet]
         [HttpPost]
+        [Authorize]
         public IActionResult DownloadTwoLang(int id)
         {
             var srtdata = SrtController.bu.GetSrt(UserId, id);
@@ -79,6 +83,7 @@ namespace 弹幕合并.Controllers
         /// <returns></returns>
         [HttpGet]
         [HttpPost]
+        [Authorize]
         public IActionResult DownloadBilibili(int id)
         {
             var srtdata = SrtController.bu.GetSrt(UserId, id);

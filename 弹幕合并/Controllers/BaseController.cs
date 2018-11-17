@@ -19,11 +19,10 @@ namespace 弹幕合并.Controllers
         /// 理论上，只有通过验证的Controller方法（带[Authorize]标签）
         /// 才能调用这个方法获得用户id，否则都只返回0
         /// </summary>
-        public int UserId {
+        public int UserId
+        {
             get
             {
-                return 1;
-
                 // 这里从请求的头里获得 jwt 的token信息
                 var headerCode = Request.Headers["Authorization"];
                 if (String.IsNullOrEmpty (headerCode)) {

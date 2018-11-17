@@ -16,6 +16,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using NLog;
 using Swashbuckle.AspNetCore.Swagger;
+using 弹幕合并.Controllers;
 
 namespace 弹幕合并
 {
@@ -38,12 +39,12 @@ namespace 弹幕合并
             services.AddAuthentication(options => {
                 //认证middleware配置
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;                
             }).AddJwtBearer(options => {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true, //是否验证Issuer
-                    ValidateAudience = true, //是否验证Audience
+                    ValidateAudience = false, //是否验证Audience
                     ValidateLifetime = false, //是否验证失效时间
                     ValidateIssuerSigningKey = true, //是否验证SecurityKey
                     ValidAudience = "chsarptools.com", //Audience
@@ -69,6 +70,7 @@ namespace 弹幕合并
 
                 //处理复杂名称
                 c.CustomSchemaIds((type) => type.FullName);
+                c.OperationFilter<AddAuthTokenHeaderParameter>(); // 手动高亮
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -76,7 +78,8 @@ namespace 弹幕合并
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {            
+        {
+            app.UseAuthentication();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using 弹幕合并.Bussiness;
@@ -18,6 +19,7 @@ namespace 弹幕合并.Controllers
 
         [HttpPost]
         [Route("api/srt/updatesrtfile")]
+        [Authorize]
         public ServerReturn UpdateSrtFile(IFormCollection postData)
         {
             if (postData.Files.Count == 0)
@@ -46,6 +48,7 @@ namespace 弹幕合并.Controllers
         [HttpGet]
         [HttpPost]
         [Route("api/srt/getsrtlist")]
+        [Authorize]
         public ServerReturn GetSrtList()
         {
             var srtItems = bu.GetSrtFiles(UserId).Select(o =>
@@ -64,6 +67,7 @@ namespace 弹幕合并.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/srt/getsrt")]
+        [Authorize]
         public ServerReturn GetSrt(int srtId)
         {
             var ret = bu.GetSrt(UserId, srtId);
@@ -80,6 +84,7 @@ namespace 弹幕合并.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/srt/srtTrans")]
+        [Authorize]
         public ServerReturn SrtTrans(int srtId, int id)
         {
             var ret = bu.SrtTrans(UserId, srtId, id);
@@ -96,6 +101,7 @@ namespace 弹幕合并.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/srt/srtTrans2")]
+        [Authorize]
         public ServerReturn SrtTrans(int srtId, string ids)
         {
             var id = ids.Split(',').Select(int.Parse).ToArray();
@@ -113,6 +119,7 @@ namespace 弹幕合并.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/srt/updateTrans")]
+        [Authorize]
         public ServerReturn SrtTrans(postSource post)
         {
             var ret = bu.UpdateTrans(UserId, post.srtId, post.id, post.text);
@@ -140,6 +147,7 @@ namespace 弹幕合并.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/srt/updateSource")]
+        [Authorize]
         public ServerReturn SrtUpdateSource(postSource post)
         {
             var ret = bu.UpdateSource(UserId, post.srtId, post.id, post.text);
@@ -156,6 +164,7 @@ namespace 弹幕合并.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/srt/replaceSource")]
+        [Authorize]
         public ServerReturn SrtReplaceSource(postSource post)
         {
             var ret = bu.ReplaceSource(UserId, post.srtId, post.text, post.replace);
@@ -172,6 +181,7 @@ namespace 弹幕合并.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/srt/SrtUp")]
+        [Authorize]
         public ServerReturn SrtUp(int srtId, int id)
         {
             var ret = bu.SrtUp(UserId, srtId, id);
@@ -188,6 +198,7 @@ namespace 弹幕合并.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/srt/SrtDown")]
+        [Authorize]
         public ServerReturn SrtDown(int srtId, int id)
         {
             var ret = bu.SrtDown(UserId, srtId, id);
@@ -204,12 +215,11 @@ namespace 弹幕合并.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("api/srt/deleteSrt")]
+        [Authorize]
         public ServerReturn DeleteSrt(int srtId)
         {
             var ret = bu.DeleteSrt(UserId, srtId);
             return new ServerReturn {error_msg = ret, error = string.IsNullOrEmpty(ret) ? 0 : -1};
         }
-
-
     }
 }
