@@ -274,7 +274,7 @@ namespace 弹幕合并.Bussiness
                         line.Text = string.Empty;
                         preLine.Text += " " + firstWord;
                         preLine.Trans = api.GetTransResult3(preLine.Text, "en", "zh");
-                        preLine.To = line.From;
+                        preLine.To = line.To;
                         ret.jsonObj.Battutas.RemoveAt(i);
                         return (null, new[] { line, preLine });
                     }
@@ -319,7 +319,7 @@ namespace 弹幕合并.Bussiness
 
                     preLine.Text += " " + line.Text;
                     preLine.Trans = api.GetTransResult3(preLine.Text, "en", "zh");
-                    preLine.To = line.From;
+                    preLine.To = line.To;
 
                     line.Text = string.Empty; // 空串数据也要返回的
                     ret.jsonObj.Battutas.RemoveAt(i);
@@ -352,7 +352,7 @@ namespace 弹幕合并.Bussiness
                         line.Text = string.Empty;
                         nextLine.Text = lastWord + " " + nextLine.Text;
                         nextLine.Trans = api.GetTransResult3(nextLine.Text, "en", "zh");
-                        nextLine.From = line.To;
+                        nextLine.From = line.From;
                         ret.jsonObj.Battutas.RemoveAt(i);
                         return (null, new[] { line, nextLine });
                     }
@@ -396,7 +396,7 @@ namespace 弹幕合并.Bussiness
                     var nextLine = ret.jsonObj.Battutas[i + 1];
                     nextLine.Text = line.Text + " " + nextLine.Text;
                     nextLine.Trans = api.GetTransResult3(nextLine.Text, "en", "zh");
-                    nextLine.From = line.To;
+                    nextLine.From = line.From;
                     ret.jsonObj.Battutas.RemoveAt(i);
                     line.Text = string.Empty; // 被删除的行，也需要返回，并设置为空串，这样前端就可以删除这行了
                     return (null, new[] { line, nextLine });
