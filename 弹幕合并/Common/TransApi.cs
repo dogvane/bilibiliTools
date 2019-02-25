@@ -46,6 +46,10 @@ namespace BaiduFanyi
 
         public string GetTransResult(string query, string from, string to)
         {
+            // 如果没有初始化api，则不返回翻译内容
+            if (this.appid == string.Empty)
+                return string.Empty;
+
             var url = BuildUrl(query, from, to);
             using (HttpClient client = new HttpClient())
             {
@@ -53,13 +57,17 @@ namespace BaiduFanyi
             }
         }
 
-        public TransReult GetTransResult2(string query, string from, string to)
+        private TransReult GetTransResult2(string query, string from, string to)
         {
             var retJson = GetTransResult(query, from, to);
             return Newtonsoft.Json.JsonConvert.DeserializeObject<TransReult>(retJson);
         }
         public string GetTransResult3(string query, string from, string to)
         {
+            // 如果没有初始化api，则不返回翻译内容
+            if (this.appid == string.Empty)
+                return string.Empty;
+
             if (query.Trim() == "")
             {
                 return string.Empty;

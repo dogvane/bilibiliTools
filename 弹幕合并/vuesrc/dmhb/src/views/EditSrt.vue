@@ -6,8 +6,11 @@
             <table class="tbcontent">
                 <tr v-for="item in srtlines" :key='item.id'>
                     <td v-if="mobile === false">
-                        {{ item.from}} => {{item.to}}<br> ({{ item.duration}})
+                        {{ item.from.replace('00:', '')}} => {{item.to.replace('00:', '')}}<br> ({{ item.duration.toFixed(2, 10)}})
                     </td>
+                    <td v-if="mobile === true">
+                        ({{ item.duration.toFixed(2, 10)}})
+                    </td>                    
                     <td>
                         {{ item.text }}
                         <br>
@@ -17,6 +20,8 @@
                         <button @click="onUp(item.id)">Up</button>
                         <button @click="onDown(item.id)">Down</button>
                         <button @click="onTrans(item.id)">Trans</button>
+                        <button @click="onLineUp(item.id)">Up Line</button>
+                        <button @click="onLineDown(item.id)">Down Line</button>
                     </td>
                 </tr>
             </table>
@@ -32,7 +37,7 @@
 <style>
 .transbox {
   width: 400px;
-  height: 300px;
+  /*height: 300px;*/
   position: fixed;
   right: 40px;
 }
@@ -142,6 +147,19 @@ export default {
             //this.transids.push(id);
             lodash.delay(this.onTrans2, 15000);
             webapi.srtDown(srtid, id).then(this.onChangeItem).then(this.pushTransIds);
+        },
+        onLineUp (id) {
+            let srtid = this.$route.params.srtId;
+            //this.transids.push(id);
+            // lodash.delay(this.onTrans2, 15000);
+            webapi.srtLineUp(srtid, id).then(this.onChangeItem).then(this.pushTransIds);
+        },
+        onLineDown (id) {
+            console.log('onLineDown');
+            let srtid = this.$route.params.srtId;
+            //this.transids.push(id);
+            // lodash.delay(this.onTrans2, 15000);
+            webapi.srtLineDown(srtid, id).then(this.onChangeItem).then(this.pushTransIds);
         },
         onTrans (id) {
             let srtid = this.$route.params.srtId;

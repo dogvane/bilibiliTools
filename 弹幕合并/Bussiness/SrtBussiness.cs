@@ -301,6 +301,35 @@ namespace 弹幕合并.Bussiness
             return ($"{id} 行错误", null);
         }
 
+        public (string error, TransBattuta[] battuta) SrtLineUp(int userId, int srtId, int id)
+        {
+            var ret = GetSrt(userId, srtId);
+            if (ret.error != null)
+                return (ret.error, null);
+
+            for (var i = 0; i < ret.jsonObj.Battutas.Count; i++)
+            {
+                var line = ret.jsonObj.Battutas[i];
+                if (line.Id == id && line.Text != string.Empty)
+                {
+                    if (i == 0)
+                        return ("首行不能提升", null);
+
+                    var preLine = ret.jsonObj.Battutas[i - 1];
+
+                    preLine.Text += " " + line.Text;
+                    preLine.Trans = api.GetTransResult3(preLine.Text, "en", "zh");
+                    preLine.To = line.From;
+
+                    line.Text = string.Empty; // 空串数据也要返回的
+                    ret.jsonObj.Battutas.RemoveAt(i);
+                    return (null, new[] {line, preLine});
+                }
+            }
+
+            return ($"{id} 行错误", null);
+        }
+
         public (string error, TransBattuta[] battuta) SrtDown(int userId, int srtId, int id)
         {
             var ret = GetSrt(userId, srtId);
@@ -344,6 +373,33 @@ namespace 弹幕合并.Bussiness
                         File.WriteAllText(ret.srtFile.JsonSrtFileName, JsonConvert.SerializeObject(ret.jsonObj));
                         return (null, new[] {line, nextLine});
                     }
+                }
+            }
+
+            return ($"{id} 行错误", null);
+        }
+
+        public (string error, TransBattuta[] battuta) SrtLineDown(int userId, int srtId, int id)
+        {
+            var ret = GetSrt(userId, srtId);
+            if (ret.error != null)
+                return (ret.error, null);
+
+            for (var i = 0; i < ret.jsonObj.Battutas.Count; i++)
+            {
+                var line = ret.jsonObj.Battutas[i];
+                if (line.Id == id && line.Text != string.Empty)
+                {
+                    if (i == ret.jsonObj.Battutas.Count - 1)
+                        return ("末行不能下降", null);
+
+                    var nextLine = ret.jsonObj.Battutas[i + 1];
+                    nextLine.Text = line.Text + " " + nextLine.Text;
+                    nextLine.Trans = api.GetTransResult3(nextLine.Text, "en", "zh");
+                    nextLine.From = line.To;
+                    ret.jsonObj.Battutas.RemoveAt(i);
+                    line.Text = string.Empty; // 被删除的行，也需要返回，并设置为空串，这样前端就可以删除这行了
+                    return (null, new[] { line, nextLine });
                 }
             }
 

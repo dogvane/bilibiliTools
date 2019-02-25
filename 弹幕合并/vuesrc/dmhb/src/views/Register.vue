@@ -56,7 +56,7 @@ export default {
                 }).then(response => {
                     var err = response.data.error_msg;
                     if (err && err.length > 0) {
-                        alert(error);
+                        alert(err);
                         return;
                     }
 

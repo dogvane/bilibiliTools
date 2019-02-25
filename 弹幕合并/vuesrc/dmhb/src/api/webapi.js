@@ -113,8 +113,28 @@ const webapi = {
         });
         return ret;
     },
+    srtLineUp(srtId, id) {
+        // 一次合并一行
+        var ret = axios.post(`/api/srt/srtLineUp/?srtId=` + srtId + "&id=" + id);
+        ret.then(response => {
+            console.log(response.data);
+        }).catch(error => {
+            console.log(error);
+        });
+        return ret;
+    },
     srtDown(srtId, id) {
         var ret = axios.post(`/api/srt/srtDown/?srtId=` + srtId + "&id=" + id);
+        ret.then(response => {
+            console.log(response.data);
+        }).catch(error => {
+            console.log(error);
+        });
+        return ret;
+    },
+    srtLineDown(srtId, id) {
+        // 一次合并一行
+        var ret = axios.post(`/api/srt/srtLineDown/?srtId=` + srtId + "&id=" + id);
         ret.then(response => {
             console.log(response.data);
         }).catch(error => {

@@ -192,6 +192,24 @@ namespace 弹幕合并.Controllers
             return new ServerReturn { data = ret.battuta };
         }
 
+
+        /// <summary>
+        /// 将首单词提升到上一句的末尾
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("api/srt/SrtLineUp")]
+        [Authorize]
+        public ServerReturn SrtLineUp(int srtId, int id)
+        {
+            var ret = bu.SrtLineUp(UserId, srtId, id);
+            if (!string.IsNullOrEmpty(ret.error))
+            {
+                return new ServerReturn { error = -1, error_msg = ret.error };
+            }
+            return new ServerReturn { data = ret.battuta };
+        }
+
         /// <summary>
         /// 将结尾的单词放到下一句的首字母里
         /// </summary>
@@ -202,6 +220,23 @@ namespace 弹幕合并.Controllers
         public ServerReturn SrtDown(int srtId, int id)
         {
             var ret = bu.SrtDown(UserId, srtId, id);
+            if (!string.IsNullOrEmpty(ret.error))
+            {
+                return new ServerReturn { error = -1, error_msg = ret.error };
+            }
+            return new ServerReturn { data = ret.battuta };
+        }
+
+        /// <summary>
+        /// 将结尾的单词放到下一句的首字母里
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("api/srt/SrtLineDown")]
+        [Authorize]
+        public ServerReturn SrtLineDown(int srtId, int id)
+        {
+            var ret = bu.SrtLineDown(UserId, srtId, id);
             if (!string.IsNullOrEmpty(ret.error))
             {
                 return new ServerReturn { error = -1, error_msg = ret.error };
