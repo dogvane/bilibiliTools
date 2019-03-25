@@ -1,10 +1,10 @@
 <template>
     <div class="home">
         <h1>编辑字幕</h1>
-        <p>{{ srt.fileName }}</p>
+        <p>{{ srt.fileName }} <a class='skip' :href='lastId'>跳转到上次编辑位置</a></p>
         <div class="main">
             <table class="tbcontent">
-                <tr v-for="item in srtlines" :key='item.id'>
+                <tr v-for="item in srtlines" :key='item.id' :id='item.id'>
                     <td v-if="mobile === false">
                         {{ item.from.replace('00:', '')}} => {{item.to.replace('00:', '')}}<br> ({{ item.duration.toFixed(2, 10)}})
                     </td>
@@ -35,6 +35,12 @@
 </template>
 
 <style>
+.skip
+{
+    padding-left:20px;
+    font-size: 12px;
+}
+
 .transbox {
   width: 400px;
   /*height: 300px;*/
@@ -65,6 +71,7 @@ button {
 
 <script>
 import webapi from '../api/webapi.js'
+
 let lodash = require('lodash')
 
 export default {
@@ -73,6 +80,7 @@ export default {
     data () {
         return {
             mobile: false,
+            lastId: '#1',
             srt: {},
             srtlines: [],
             transids: [],
@@ -93,6 +101,11 @@ export default {
             console.log('传参错误');
             this.$router.replace('/');
             return;
+        }
+
+        var lastId = localStorage.getItem(srtId)
+        if(lastId){
+            this.lastId = '#' + lastId;
         }
 
         const that = this;
@@ -141,18 +154,21 @@ export default {
             //this.transids.push(id);
             lodash.delay(this.onTrans2, 15000);
             webapi.srtUp(srtid, id).then(this.onChangeItem).then(this.pushTransIds);
+            localStorage.setItem(srtid, id);
         },
         onDown (id) {
             let srtid = this.$route.params.srtId;
             //this.transids.push(id);
             lodash.delay(this.onTrans2, 15000);
             webapi.srtDown(srtid, id).then(this.onChangeItem).then(this.pushTransIds);
+            localStorage.setItem(srtid, id);
         },
         onLineUp (id) {
             let srtid = this.$route.params.srtId;
             //this.transids.push(id);
             // lodash.delay(this.onTrans2, 15000);
             webapi.srtLineUp(srtid, id).then(this.onChangeItem).then(this.pushTransIds);
+            localStorage.setItem(srtid, id);
         },
         onLineDown (id) {
             console.log('onLineDown');
@@ -160,10 +176,12 @@ export default {
             //this.transids.push(id);
             // lodash.delay(this.onTrans2, 15000);
             webapi.srtLineDown(srtid, id).then(this.onChangeItem).then(this.pushTransIds);
+            localStorage.setItem(srtid, id);
         },
         onTrans (id) {
             let srtid = this.$route.params.srtId;
             webapi.srtTrans(srtid, id).then(this.onChangeItem);
+            localStorage.setItem(srtid, id);
         },
         onTrans2 () {
             let ids = this.transids;
