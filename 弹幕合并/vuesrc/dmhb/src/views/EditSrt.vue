@@ -143,10 +143,16 @@ export default {
         goLastId()
         {
             let selector = this.lastId;
-            console.log('selector', selector);
-            var anchor = document.getElementById(selector);
-            if(anchor)
-                document.documentElement.scrollTop = anchor.offsetTop
+            for(var i = 0;i < 8; i++)
+            {
+                console.log('selector', selector - i);
+                var anchor = document.getElementById(selector - i);
+                if(anchor)
+                {
+                    document.documentElement.scrollTop = anchor.offsetTop;
+                    break;
+                }
+            }
         },
         setLastId(strId, lineId){
             localStorage.setItem(strId, lineId);
