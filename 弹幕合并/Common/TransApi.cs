@@ -74,6 +74,11 @@ namespace BaiduFanyi
             }
 
             var ret = GetTransResult2(query, from, to);
+            if (!string.IsNullOrEmpty(ret.error_code))
+            {
+                Console.WriteLine(ret.error_code + "  " + ret.error_msg);
+            }
+
             if (ret.trans_result == null)
                 return string.Empty;
 

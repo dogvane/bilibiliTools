@@ -25,10 +25,17 @@ namespace 弹幕合并.Controllers
             {
                 // 这里从请求的头里获得 jwt 的token信息
                 var headerCode = Request.Headers["Authorization"];
-                if (String.IsNullOrEmpty (headerCode)) {
-                    Logger.Error ("Request header not have Authorization.");
-                    return 0;
+                if (string.IsNullOrEmpty (headerCode))
+                {
+                    headerCode = Request.Cookies["Authorization"];
+
+                    if (string.IsNullOrEmpty(headerCode))
+                    {
+                        Logger.Error("Request header not have Authorization.");
+                        return 0;
+                    }
                 }
+
                 var code = headerCode.ToString ().Replace ("Bearer ", "");
                 
                 // 这里从 jwt token 里解析出用户id，默认认为已经通过权限验证了

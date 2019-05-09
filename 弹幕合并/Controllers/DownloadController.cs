@@ -13,7 +13,6 @@ namespace 弹幕合并.Controllers
     {
         [HttpGet]
         [HttpPost]
-        [Authorize]
         public IActionResult Download(int id)
         {
             var srtdata = SrtController.bu.GetSrt(UserId, id);
@@ -33,7 +32,6 @@ namespace 弹幕合并.Controllers
 
         [HttpGet]
         [HttpPost]
-        [Authorize]
         public IActionResult DownloadTrans(int id)
         {
             var srtdata = SrtController.bu.GetSrt(UserId, id);
@@ -58,7 +56,6 @@ namespace 弹幕合并.Controllers
         /// <returns></returns>
         [HttpGet]
         [HttpPost]
-        [Authorize]
         public IActionResult DownloadTwoLang(int id)
         {
             var srtdata = SrtController.bu.GetSrt(UserId, id);
@@ -83,7 +80,6 @@ namespace 弹幕合并.Controllers
         /// <returns></returns>
         [HttpGet]
         [HttpPost]
-        [Authorize]
         public IActionResult DownloadBilibili(int id)
         {
             var srtdata = SrtController.bu.GetSrt(UserId, id);
