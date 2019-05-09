@@ -35,6 +35,7 @@ button {
 
 <script>
 import webapi from '../api/webapi.js'
+import Cookies from 'js-cookie'
 
 export default {
   name: 'srtlist',
@@ -45,6 +46,9 @@ export default {
     };
   },
   created () {
+
+    const token = localStorage.getItem("token");
+    Cookies.set('Authorization', token);
 
     const that = this;
     webapi.getSrtList().then(result => {
@@ -75,7 +79,7 @@ export default {
         }
       },
       ondownload (id) {
-        window.location.href = '../srt/download/' + id;
+        window.location.href = '../srt/Download/' + id;
       },
       ondownload2 (id) {
         window.location.href = '../srt/downloadtrans/' + id;

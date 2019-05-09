@@ -9,8 +9,9 @@
     },
     "dependencies": {
         "axios": "^0.18.0",
-        "eslint-plugin-vue": "^4.7.1",
         "eslint-plugin-html": "^4.0.0",
+        "eslint-plugin-vue": "^4.7.1",
+        "js-cookie": "^2.2.0",
         "loadsh": "0.0.3",
         "vue": "^2.5.17",
         "vue-router": "^3.0.1",
