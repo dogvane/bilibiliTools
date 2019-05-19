@@ -13,7 +13,6 @@ namespace 弹幕合并.Controllers
     /// </summary>
     public class BaseController : ControllerBase
     {
-
         /// <summary>
         /// 用户id
         /// 理论上，只有通过验证的Controller方法（带[Authorize]标签）

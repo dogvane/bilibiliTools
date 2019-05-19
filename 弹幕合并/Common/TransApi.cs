@@ -46,7 +46,7 @@ namespace BaiduFanyi
 
         public string GetTransResult(string query, string from, string to)
         {
-            // Èç¹ûÃ»ÓÐ³õÊ¼»¯api£¬Ôò²»·µ»Ø·­ÒëÄÚÈÝ
+            // ï¿½ï¿½ï¿½Ã»ï¿½Ð³ï¿½Ê¼ï¿½ï¿½apiï¿½ï¿½ï¿½ò²»·ï¿½ï¿½Ø·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (this.appid == string.Empty)
                 return string.Empty;
 
@@ -64,7 +64,7 @@ namespace BaiduFanyi
         }
         public string GetTransResult3(string query, string from, string to)
         {
-            // Èç¹ûÃ»ÓÐ³õÊ¼»¯api£¬Ôò²»·µ»Ø·­ÒëÄÚÈÝ
+            // ï¿½ï¿½ï¿½Ã»ï¿½Ð³ï¿½Ê¼ï¿½ï¿½apiï¿½ï¿½ï¿½ò²»·ï¿½ï¿½Ø·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (this.appid == string.Empty)
                 return string.Empty;
 
