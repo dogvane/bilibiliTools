@@ -40,7 +40,7 @@ namespace 弹幕合并.Controllers
                 StringBuilder writer = new StringBuilder();
                 foreach (var item in srtdata.jsonObj.Battutas)
                 {
-                    writer.AppendLine(item.GetTransData());
+                    writer.AppendLine(item.GetTransData()).AppendLine();
                 }
 
                 var bytes = Encoding.UTF8.GetBytes(writer.ToString());
