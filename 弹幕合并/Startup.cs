@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using NLog;
+using QCloud;
 using Swashbuckle.AspNetCore.Swagger;
 using 弹幕合并.Controllers;
 
@@ -116,6 +117,7 @@ namespace 弹幕合并
             // app.UseMvc();
 
             app.UseBaiduFanyi(Configuration);
+            app.UseQCloudTransApi(Configuration);
         }
     }
 }

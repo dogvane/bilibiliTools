@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
+using 弹幕合并.Common;
 
 namespace BaiduFanyi
 {
@@ -22,7 +23,7 @@ namespace BaiduFanyi
         }
     }
     
-    public class TransApi
+    public class TransApi: ITransApi
     {
         private static string TRANS_API_HOST = "http://api.fanyi.baidu.com/api/trans/vip/translate";
 
@@ -129,6 +130,18 @@ namespace BaiduFanyi
             }
             
             //return System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(source, "MD5");
+        }
+
+        /// <summary>
+        /// 对外的接口
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        public string GetTrans(string query, string @from, string to)
+        {
+            return GetTransResult3(query, from, to);
         }
     }
 

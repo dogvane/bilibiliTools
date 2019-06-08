@@ -9,6 +9,7 @@ using 弹幕合并.Bussiness.Database;
 using 弹幕合并.Bussiness.Entity;
 using ServiceStack.OrmLite;
 using BaiduFanyi;
+using 弹幕合并.Common;
 
 namespace 弹幕合并.Bussiness
 {
@@ -37,11 +38,11 @@ namespace 弹幕合并.Bussiness
             Directory.CreateDirectory("upfiles");
         }
 
-        private TransApi api;
+        private ITransApi api;
 
         public SrtBussiness()
         {
-            api = new TransApi();
+            api = TransFac.GetCurrentTransApi();
         }
 
         public SrtFile[] GetSrtFiles(int userId)
@@ -155,7 +156,7 @@ namespace 弹幕合并.Bussiness
             line.Text = text;
 
             bool notTrnas = string.IsNullOrEmpty(line.Trans2) || line.Trans == line.Trans2;
-            line.Trans = api.GetTransResult3(line.Text, "en", "zh");
+            line.Trans = api.GetTrans(line.Text, "en", "zh");
             if (notTrnas)
                 line.Trans2 = line.Trans;
 
@@ -186,7 +187,7 @@ namespace 弹幕合并.Bussiness
                     line.Text = line.Text.Replace(source, replace);
 
                     bool notTrnas = string.IsNullOrEmpty(line.Trans2) || line.Trans == line.Trans2;
-                    line.Trans = api.GetTransResult3(line.Text, "en", "zh");
+                    line.Trans = api.GetTrans(line.Text, "en", "zh");
                     if (notTrnas)
                         line.Trans2 = line.Trans;
                     retDatas.Add(line);
@@ -210,7 +211,7 @@ namespace 弹幕合并.Bussiness
             }
 
             bool notTrnas = string.IsNullOrEmpty(line.Trans2) || line.Trans == line.Trans2;
-            line.Trans = api.GetTransResult3(line.Text, "en", "zh");
+            line.Trans = api.GetTrans(line.Text, "en", "zh");
             if (notTrnas)
                 line.Trans2 = line.Trans;
 
@@ -234,7 +235,7 @@ namespace 弹幕合并.Bussiness
                 }
 
                 bool notTrnas = string.IsNullOrEmpty(line.Trans2) || line.Trans == line.Trans2;
-                line.Trans = api.GetTransResult3(line.Text, "en", "zh");
+                line.Trans = api.GetTrans(line.Text, "en", "zh");
                 if (notTrnas)
                     line.Trans2 = line.Trans;
 
@@ -273,7 +274,7 @@ namespace 弹幕合并.Bussiness
                         // 提升会导致自己的数据被删除
                         line.Text = string.Empty;
                         preLine.Text += " " + firstWord;
-                        preLine.Trans = api.GetTransResult3(preLine.Text, "en", "zh");
+                        preLine.Trans = api.GetTrans(preLine.Text, "en", "zh");
                         preLine.To = line.To;
                         ret.jsonObj.Battutas.RemoveAt(i);
                         return (null, new[] { line, preLine });
@@ -318,7 +319,7 @@ namespace 弹幕合并.Bussiness
                     var preLine = ret.jsonObj.Battutas[i - 1];
 
                     preLine.Text += " " + line.Text;
-                    preLine.Trans = api.GetTransResult3(preLine.Text, "en", "zh");
+                    preLine.Trans = api.GetTrans(preLine.Text, "en", "zh");
                     preLine.To = line.To;
 
                     line.Text = string.Empty; // 空串数据也要返回的
@@ -351,7 +352,7 @@ namespace 弹幕合并.Bussiness
                         // 下降会导致当前行被删除
                         line.Text = string.Empty;
                         nextLine.Text = lastWord + " " + nextLine.Text;
-                        nextLine.Trans = api.GetTransResult3(nextLine.Text, "en", "zh");
+                        nextLine.Trans = api.GetTrans(nextLine.Text, "en", "zh");
                         nextLine.From = line.From;
                         ret.jsonObj.Battutas.RemoveAt(i);
                         return (null, new[] { line, nextLine });
@@ -395,7 +396,7 @@ namespace 弹幕合并.Bussiness
 
                     var nextLine = ret.jsonObj.Battutas[i + 1];
                     nextLine.Text = line.Text + " " + nextLine.Text;
-                    nextLine.Trans = api.GetTransResult3(nextLine.Text, "en", "zh");
+                    nextLine.Trans = api.GetTrans(nextLine.Text, "en", "zh");
                     nextLine.From = line.From;
                     ret.jsonObj.Battutas.RemoveAt(i);
                     line.Text = string.Empty; // 被删除的行，也需要返回，并设置为空串，这样前端就可以删除这行了
