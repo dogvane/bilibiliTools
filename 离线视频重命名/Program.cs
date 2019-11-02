@@ -13,14 +13,15 @@ namespace 离线视频重命名
     {
         static void Main(string[] args)
         {
-            var path = @"C:\zb\download";
-            var outpath = @"r:\";
+            var path = @"R:\73706327";
+            var outpath = @"V:\bilibil2\Elasticsearch高级课程2019入门到核心技术讲解与项目实战教程";
             var entrys = Directory.GetFiles(path, "entry.json", SearchOption.AllDirectories);
             var batdata = new StringBuilder();
 
 
             foreach (var fileName in entrys)
             {
+                Console.WriteLine(fileName);
                 var fileInfo = new FileInfo(fileName);
                 var hasSubPart = fileInfo.Directory.Parent.GetDirectories().Length > 1;
 
@@ -37,41 +38,73 @@ namespace 离线视频重命名
                     outFileName = title + " " + partName + ".flv";
                 }
 
+                int prefered_video_quality = 0;
+
+                if (data["prefered_video_quality"] != null)
+                {
+                    prefered_video_quality = (int)data["prefered_video_quality"];
+                }
+
+                #region blv 模式
+
 
                 var blvs = fileInfo.Directory.GetFiles("*.blv", SearchOption.AllDirectories).ToList();
-                if (blvs.Count == 0)
-                    continue;
 
-                if (blvs.Count > 1)
+                if (blvs.Count > 0)
                 {
-                    blvs.Sort((o1, o2) =>
+                    // blv 文件模式
+                    if (blvs.Count > 1)
                     {
-                        return GetCompareName(o1).CompareTo(GetCompareName(o2));
-                    });
+                        blvs.Sort((o1, o2) => { return GetCompareName(o1).CompareTo(GetCompareName(o2)); });
 
-                    StringBuilder sb = new StringBuilder();
-                    
-                    foreach (var blv in blvs)
+                        StringBuilder sb = new StringBuilder();
+
+                        foreach (var blv in blvs)
+                        {
+                            sb.Append("file '").Append(blv.FullName).Append("'").AppendLine();
+                        }
+
+                        if (!Directory.Exists(Path.Combine(outpath, "concat")))
+                            Directory.CreateDirectory(Path.Combine(outpath, "concat"));
+
+                        var concatFileName = Path.Combine(outpath, "concat", title + partName + ".txt");
+
+                        File.WriteAllText(concatFileName, sb.ToString());
+
+                        var bat = string.Format("ffmpeg -f concat -safe 0 -i \"{0}\" -c copy \"{1}\"", concatFileName,
+                            Path.Combine(outpath, outFileName));
+
+                        batdata.AppendLine(bat);
+                    }
+                    else
                     {
-                        sb.Append("file '").Append(blv.FullName).Append("'").AppendLine();
+                        // File.Copy(blvs[0].FullName, Path.Combine(outpath, outFileName));
+
+                        batdata.AppendFormat("copy \"{0}\" \"{1}\"", blvs[0].FullName,
+                            Path.Combine(outpath, outFileName)).AppendLine();
+                    }
+                }
+
+                #endregion
+
+
+                var m4s = fileInfo.Directory.GetFiles("*.m4s", SearchOption.AllDirectories).ToList();
+
+                if (m4s.Count > 0)
+                {
+                    // m4s 模式，音频和视频分离，但是不存在时间上的分割了
+                    var video = m4s.FirstOrDefault(o => o.Name == "video.m4s");
+                    var audio = m4s.FirstOrDefault(o => o.Name == "audio.m4s");
+
+                    if (video == null || audio == null)
+                    {
+                        continue;
                     }
 
-                    if (!Directory.Exists(Path.Combine(outpath, "concat")))
-                        Directory.CreateDirectory(Path.Combine(outpath, "concat"));
-
-                    var concatFileName = Path.Combine(outpath, "concat", title + partName + ".txt");
-                    
-                    File.WriteAllText(concatFileName, sb.ToString());
-
-                    var bat = string.Format("ffmpeg -f concat -safe 0 -i \"{0}\" -c copy \"{1}\"", concatFileName, Path.Combine(outpath, outFileName));
+                    var bat = string.Format("ffmpeg -i \"{0}\" -i \"{1}\" -c:v copy -c:a copy \"{2}\"", video.FullName, audio.FullName, Path.Combine(outpath, outFileName));
 
                     batdata.AppendLine(bat);
-                }
-                else
-                {
-                    // File.Copy(blvs[0].FullName, Path.Combine(outpath, outFileName));
 
-                    batdata.AppendFormat("copy \"{0}\" \"{1}\"", blvs[0].FullName, Path.Combine(outpath, outFileName)).AppendLine();
                 }
             }
 
