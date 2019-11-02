@@ -15,6 +15,13 @@ namespace 离线视频重命名
         {
             var path = @"R:\73706327";
             var outpath = @"V:\bilibil2\Elasticsearch高级课程2019入门到核心技术讲解与项目实战教程";
+
+            if(args.Length > 0)
+            {
+                path = args[0];
+                outpath = AppDomain.CurrentDomain.BaseDirectory;
+            }
+
             var entrys = Directory.GetFiles(path, "entry.json", SearchOption.AllDirectories);
             var batdata = new StringBuilder();
 
