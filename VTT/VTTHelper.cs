@@ -7,7 +7,10 @@ using System.Text.RegularExpressions;
 
 namespace VTT
 {
-    class VTTHelper
+    /// <summary>
+    /// 字幕的工具类
+    /// </summary>
+    public class VTTHelper
     {
         private static readonly string[] _delimiters = new string[] { "-->", "- >", "->" };
 
@@ -16,12 +19,23 @@ namespace VTT
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
+
         public static Vtt GetVTTFromFile(string fileName)
+        {
+            return GetVTTFromFile2<Vtt>(fileName);
+        }
+
+        /// <summary>
+        /// 从文件里读取一个VTT的文件
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static T GetVTTFromFile2<T>(string fileName) where T : Vtt, new()
         {
             if (!File.Exists(fileName))
                 return null;
 
-            var vtt = new Vtt();
+            var vtt = new T();
 
             var reader = File.ReadLines(fileName).GetEnumerator();
             if (!(reader.MoveNext() && reader.Current == "WEBVTT"))
@@ -59,7 +73,6 @@ namespace VTT
                         break;
                     }
                 }
-
 
                 if (readLines.Count >= 3)
                 {
@@ -146,6 +159,34 @@ namespace VTT
                             preline = line;
                         }
                     }
+                }
+
+                if(readLines.Count == 2)
+                {
+                    // 只有2行也是可能的，大多是google翻译后的文件内容
+                    var line = new VttLine();
+
+                    // 第一行是时间格式
+                    var l1 = readLines[0].Split(_delimiters, StringSplitOptions.RemoveEmptyEntries);
+                    if (l1.Length >= 2)
+                    {
+                        line.From = l1[0].RegTime();
+                        if (preline != null)
+                        {
+                            // 因为 google 会存在一个独立的字幕行段，只有 0.01s
+                            // 会导致解析的字幕会断针，所以这里把整个字幕向前修正
+                            var d = line.FromSec - preline.ToSec;
+                            if (d < 1)
+                            {
+                                line.From = preline.To;
+                            }
+                        }
+
+                        line.To = l1[1].RegTime();
+                    }
+
+                    // 第二行就是正文了，后面的单词word，参考srt的切割方案进行处理
+                    line.Text = readLines[1];
                 }
             }
 
