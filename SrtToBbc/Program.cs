@@ -50,7 +50,7 @@ namespace SrtToBbc
             }
             var fi = new FileInfo(fileName);
             var ex = fi.Extension;
-            var writeFileName = fileName.Replace(ex, ".bbc");
+            var writeFileName = fileName.Replace(ex, ".bcc");
 
             var json = JsonConvert.SerializeObject(bilibili, Formatting.Indented);
             var bytes = Encoding.UTF8.GetBytes(json);
