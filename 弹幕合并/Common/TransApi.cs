@@ -47,7 +47,6 @@ namespace BaiduFanyi
 
         public string GetTransResult(string query, string from, string to)
         {
-            // ���û�г�ʼ��api���򲻷��ط�������
             if (this.appid == string.Empty)
                 return string.Empty;
 
@@ -65,7 +64,6 @@ namespace BaiduFanyi
         }
         public string GetTransResult3(string query, string from, string to)
         {
-            // ���û�г�ʼ��api���򲻷��ط�������
             if (this.appid == string.Empty)
                 return string.Empty;
 

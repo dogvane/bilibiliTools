@@ -35,5 +35,26 @@ namespace 弹幕合并.Bussiness.Entity
         /// srt文件处理后的json文件路径
         /// </summary>
         public string JsonSrtFileName { get; set; }
+
+        /// <summary>
+        /// 文件类型，后面添加的，之前只处理srt
+        /// </summary>
+        [Ignore]
+        public SrtFileType FileType
+        {
+            get
+            {
+                if (SrtFileName.Contains(".srt", StringComparison.OrdinalIgnoreCase))
+                    return SrtFileType.SRT;
+                return SrtFileType.VTT;
+            }
+        }
+    }
+
+    public enum SrtFileType
+    {
+        SRT,
+
+        VTT,
     }
 }

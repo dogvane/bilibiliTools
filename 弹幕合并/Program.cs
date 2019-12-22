@@ -18,7 +18,7 @@ namespace 弹幕合并
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args).UseUrls("http://localhost:5000")
+            WebHost.CreateDefaultBuilder(args).UseUrls("http://0.0.0.0:5000")
                 .UseStartup<Startup>();
     }
 }

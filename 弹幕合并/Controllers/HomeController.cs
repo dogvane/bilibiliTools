@@ -100,7 +100,7 @@ namespace 弹幕合并.Controllers
                 stream.Read(bytes, 0, (int) file.Length);
 
                 var lines = Encoding.UTF8.GetString(bytes).Split(@"\n");
-                var battutes = new SrtManagerT<TransBattuta>().LoadBattute(lines);
+                var battutes = new SrtManagerT<Battuta>().LoadBattute(lines);
 
                 var bilibili = new BilibiliSrtFile();
                 bilibili.font_size = 0.4;

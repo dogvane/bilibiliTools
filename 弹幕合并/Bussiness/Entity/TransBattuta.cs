@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Dogvane.Srt;
+using 弹幕合并.Bussiness.Subtitles;
 
 namespace 弹幕合并.Bussiness.Entity
 {
-    public class TransBattuta: Battuta
+    public class TransBattuta: Line
     {
         public TransBattuta()
         {
 
         }
 
-        public TransBattuta(int id, string from, string to, string text, string trans = null) : base(id, from, to, text)
-        {
-            Trans = trans;
-        }
+        //public TransBattuta(int id, string from, string to, string text, string trans = null) : base(id, from, to, text)
+        //{
+        //    Trans = trans;
+        //}
 
         /// <summary>
         /// 翻译内容

@@ -26,6 +26,8 @@ namespace 弹幕合并.Controllers
                 return new ServerReturn {error = -1, error_msg = "没有上传文件"};
 
             var file = postData.Files[0];
+
+            // 是否合并字幕内容
             var ismergeStr = postData["ismerge"].LastOrDefault();
             bool ismerge = false;
             if (!string.IsNullOrEmpty(ismergeStr))
@@ -35,7 +37,10 @@ namespace 弹幕合并.Controllers
             {
                 var bytes = new byte[file.Length];
                 stream.Read(bytes, 0, (int)file.Length);
-                bu.UploadSrtFile(UserId, file.FileName, bytes, ismerge);
+                if (file.FileName.ToLower().IndexOf(".vtt") > -1)
+                    bu.UploadVttFile(UserId, file.FileName, bytes, ismerge);
+                else
+                    bu.UploadSrtFile(UserId, file.FileName, bytes, ismerge);
             }
 
             return new ServerReturn { };
@@ -184,7 +189,7 @@ namespace 弹幕合并.Controllers
         [Authorize]
         public ServerReturn SrtUp(int srtId, int id)
         {
-            var ret = bu.SrtUp(UserId, srtId, id);
+            var ret = bu.WordUp(UserId, srtId, id);
             if (!string.IsNullOrEmpty(ret.error))
             {
                 return new ServerReturn { error = -1, error_msg = ret.error };
@@ -202,7 +207,7 @@ namespace 弹幕合并.Controllers
         [Authorize]
         public ServerReturn SrtLineUp(int srtId, int id)
         {
-            var ret = bu.SrtLineUp(UserId, srtId, id);
+            var ret = bu.LineUp(UserId, srtId, id);
             if (!string.IsNullOrEmpty(ret.error))
             {
                 return new ServerReturn { error = -1, error_msg = ret.error };
@@ -219,7 +224,7 @@ namespace 弹幕合并.Controllers
         [Authorize]
         public ServerReturn SrtDown(int srtId, int id)
         {
-            var ret = bu.SrtDown(UserId, srtId, id);
+            var ret = bu.WordDown(UserId, srtId, id);
             if (!string.IsNullOrEmpty(ret.error))
             {
                 return new ServerReturn { error = -1, error_msg = ret.error };
@@ -236,7 +241,7 @@ namespace 弹幕合并.Controllers
         [Authorize]
         public ServerReturn SrtLineDown(int srtId, int id)
         {
-            var ret = bu.SrtLineDown(UserId, srtId, id);
+            var ret = bu.LineDown(UserId, srtId, id);
             if (!string.IsNullOrEmpty(ret.error))
             {
                 return new ServerReturn { error = -1, error_msg = ret.error };
