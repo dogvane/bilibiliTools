@@ -33,12 +33,12 @@ namespace 弹幕合并.Bussiness.Entity
         /// 生成导出翻译的数据
         /// </summary>
         /// <returns></returns>
-        public string GetTransData()
+        public string GetSrtTransData()
         {
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine(Id.ToString());
-            sb.AppendFormat("{0} --> {1}", From, To).AppendLine();
+            sb.AppendFormat("{0} --> {1}", From.Replace(".", ","), To.Replace(".", ",")).AppendLine();
             if (string.IsNullOrEmpty(Trans2))
                 sb.AppendLine(Trans);
             else
@@ -51,12 +51,12 @@ namespace 弹幕合并.Bussiness.Entity
         /// 生成导出翻译的数据
         /// </summary>
         /// <returns></returns>
-        public string GetTwoLangData()
+        public string GetSrtTwoLangData()
         {
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine(Id.ToString());
-            sb.AppendFormat("{0} --> {1}", From, To).AppendLine();
+            sb.AppendFormat("{0} --> {1}", From.Replace(".", ","), To.Replace(".", ",")).AppendLine();
             sb.AppendLine(Text);
             sb.AppendLine(Trans);
 

@@ -87,12 +87,12 @@ namespace 弹幕合并.Bussiness.Subtitles
             return string.Format("{0}   {1} --> {2} {3}", Id, From, To, Text);
         }
 
-        public string GetData()
+        public string GetSrtData()
         {
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine(Id.ToString());
-            sb.AppendFormat("{0} --> {1}", From, To).AppendLine();
+            sb.AppendFormat("{0} --> {1}", From.Replace(".", ","), To.Replace(".", ",")).AppendLine();
             sb.AppendLine(Text);
 
             return sb.ToString();

@@ -21,11 +21,15 @@ namespace 弹幕合并.Controllers
                 StringBuilder writer = new StringBuilder();
                 foreach (var item in srtdata.jsonObj.Battutas)
                 {
-                    writer.AppendLine(item.GetData());
+                    writer.AppendLine(item.GetSrtData());
                 }
 
                 var bytes = Encoding.UTF8.GetBytes(writer.ToString());
-                return File(bytes, "text/srt", srtdata.jsonObj.FileName);
+                var fileName = srtdata.jsonObj.FileName;
+                if (srtdata.srtFile.FileType == SrtFileType.VTT)
+                    fileName = fileName.Replace(".vtt", ".srt");
+
+                return File(bytes, "text/srt", fileName);
             }
             return File(Encoding.UTF8.GetBytes("no find srt " + id), "txt/srt", Path.GetFileName("error.log"));
         }
@@ -40,11 +44,15 @@ namespace 弹幕合并.Controllers
                 StringBuilder writer = new StringBuilder();
                 foreach (var item in srtdata.jsonObj.Battutas)
                 {
-                    writer.AppendLine(item.GetTransData()).AppendLine();
+                    writer.AppendLine(item.GetSrtTransData()).AppendLine();
                 }
 
                 var bytes = Encoding.UTF8.GetBytes(writer.ToString());
-                return File(bytes, "text/srt", "(中文)" + srtdata.jsonObj.FileName);
+
+                var fileName = srtdata.jsonObj.FileName;
+                if (srtdata.srtFile.FileType == SrtFileType.VTT)
+                    fileName = fileName.Replace(".vtt", ".srt");
+                return File(bytes, "text/srt", "(中文)" + fileName);
             }
             return File(Encoding.UTF8.GetBytes("no find srt " + id), "txt/srt", Path.GetFileName("error.log"));
         }
@@ -64,11 +72,15 @@ namespace 弹幕合并.Controllers
                 StringBuilder writer = new StringBuilder();
                 foreach (var item in srtdata.jsonObj.Battutas)
                 {
-                    writer.AppendLine(item.GetTwoLangData());
+                    writer.AppendLine(item.GetSrtTwoLangData());
                 }
 
                 var bytes = Encoding.UTF8.GetBytes(writer.ToString());
-                return File(bytes, "text/srt", "(中英文)" + srtdata.jsonObj.FileName);
+                var fileName = srtdata.jsonObj.FileName;
+                if (srtdata.srtFile.FileType == SrtFileType.VTT)
+                    fileName = fileName.Replace(".vtt", ".srt");
+
+                return File(bytes, "text/srt", "(中英文)" + fileName);
             }
             return File(Encoding.UTF8.GetBytes("no find srt " + id), "txt/srt", Path.GetFileName("error.log"));
         }
@@ -101,12 +113,12 @@ namespace 弹幕合并.Controllers
                         to = item.ToSec,
                         content = item.Text,
                         location = 2,
-                    });                    
+                    });
                 }
 
                 var json = JsonConvert.SerializeObject(bilibili);
                 var bytes = Encoding.UTF8.GetBytes(json);
-                return File(bytes, "text/json", "(b站格式)" + srtdata.jsonObj.FileName.Replace(".srt",".bcc"));
+                return File(bytes, "text/json", "(b站格式)" + srtdata.jsonObj.FileName.Replace(".srt",".bcc").Replace(".vtt", ".bcc"));
             }
             return File(Encoding.UTF8.GetBytes("no find srt " + id), "txt/srt", Path.GetFileName("error.log"));
         }
