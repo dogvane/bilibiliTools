@@ -20,7 +20,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ReadMe", "ReadMe", "{373326
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SrtToBcc", "SrtToBbc\SrtToBcc.csproj", "{D476118E-2F28-46C6-B6D3-803D0C2BD50F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VTT", "VTT\VTT.csproj", "{BEE7936D-9EAE-4DDB-999F-2BC8ABD585E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VTT", "VTT\VTT.csproj", "{BEE7936D-9EAE-4DDB-999F-2BC8ABD585E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VTTtoSrt", "VTTtoSrt\VTTtoSrt.csproj", "{B40E7F87-962B-4B1A-9120-DC8AEEC36E2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VTTtoBcc", "VTTtoBcc\VTTtoBcc.csproj", "{22E03327-8CD1-4CE2-8F7B-F863C73CEABA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,6 +60,14 @@ Global
 		{BEE7936D-9EAE-4DDB-999F-2BC8ABD585E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEE7936D-9EAE-4DDB-999F-2BC8ABD585E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEE7936D-9EAE-4DDB-999F-2BC8ABD585E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B40E7F87-962B-4B1A-9120-DC8AEEC36E2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B40E7F87-962B-4B1A-9120-DC8AEEC36E2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B40E7F87-962B-4B1A-9120-DC8AEEC36E2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B40E7F87-962B-4B1A-9120-DC8AEEC36E2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22E03327-8CD1-4CE2-8F7B-F863C73CEABA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22E03327-8CD1-4CE2-8F7B-F863C73CEABA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22E03327-8CD1-4CE2-8F7B-F863C73CEABA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22E03327-8CD1-4CE2-8F7B-F863C73CEABA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
