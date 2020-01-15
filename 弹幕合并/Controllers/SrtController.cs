@@ -37,7 +37,8 @@ namespace 弹幕合并.Controllers
             {
                 var bytes = new byte[file.Length];
                 stream.Read(bytes, 0, (int)file.Length);
-                if (file.FileName.ToLower().IndexOf(".vtt") > -1)
+                var extension = new FileInfo(file.FileName).Extension;
+                if (extension.IndexOf(".vtt") > -1)
                     bu.UploadVttFile(UserId, file.FileName, bytes, ismerge);
                 else
                     bu.UploadSrtFile(UserId, file.FileName, bytes, ismerge);
@@ -111,6 +112,25 @@ namespace 弹幕合并.Controllers
         {
             var id = ids.Split(',').Select(int.Parse).ToArray();
             var ret = bu.SrtTrans2(UserId, srtId, id);
+            if (!string.IsNullOrEmpty(ret.error))
+            {
+                return new ServerReturn { error = -1, error_msg = ret.error };
+            }
+            return new ServerReturn { data = ret.battuta };
+        }
+
+        /// <summary>
+        /// 翻译字幕
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("api/srt/srtTransAll")]
+        [Authorize]
+        public ServerReturn StrTransAll(int srtId)
+        {
+            Console.WriteLine($"StrTransAll {srtId}");
+
+            var ret = bu.SrtTransAll(UserId, srtId);
             if (!string.IsNullOrEmpty(ret.error))
             {
                 return new ServerReturn { error = -1, error_msg = ret.error };

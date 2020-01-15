@@ -6,14 +6,15 @@
         <span class="title">{{ srtfile.srtFileName }}</span>
         <span class="time">{{ srtfile.uploadTime + '/' + srtfile.lastUpdate}}</span>
         <span>
-          <button @click='onedit(srtfile.id, false)'>编辑</button>
-          <button @click='onedit(srtfile.id, true)'>手机编辑</button>
-          <button @click='onTrans(srtfile.id, true)'>人工翻译字幕</button>
-          <button @click='ondelete(srtfile.id)'>删除</button>
-          <button @click='ondownload(srtfile.id)'>下载</button>
-          <button @click='ondownload2(srtfile.id)'>下载中文</button>
-          <button @click='ondownload3(srtfile.id)'>下载中英文</button>
-          <button @click='ondownload4(srtfile.id)'>下载b站弹幕</button>
+          <button @click="onedit(srtfile.id, false)">编辑</button>
+          <button @click="onedit(srtfile.id, true)">手机编辑</button>
+          <button @click="onTrans(srtfile.id, true)">人工翻译字幕</button>
+          <button @click="onTransAll(srtfile.id)">翻译所有</button>
+          <button @click="ondelete(srtfile.id)">删除</button>
+          <button @click="ondownload(srtfile.id)">下载</button>
+          <button @click="ondownload2(srtfile.id)">下载中文</button>
+          <button @click="ondownload3(srtfile.id)">下载中英文</button>
+          <button @click="ondownload4(srtfile.id)">下载b站弹幕</button>
         </span>
       </li>
     </ul>
@@ -34,21 +35,20 @@ button {
 
 
 <script>
-import webapi from '../api/webapi.js'
-import Cookies from 'js-cookie'
+import webapi from "../api/webapi.js";
+import Cookies from "js-cookie";
 
 export default {
-  name: 'srtlist',
-  components: {
-  }, data () {
+  name: "srtlist",
+  components: {},
+  data() {
     return {
       srtFiles: []
     };
   },
-  created () {
-
+  created() {
     const token = localStorage.getItem("token");
-    Cookies.set('Authorization', token);
+    Cookies.set("Authorization", token);
 
     const that = this;
     webapi.getSrtList().then(result => {
@@ -58,38 +58,47 @@ export default {
       }
     });
   },
-  methods:
-    {
-      onedit (id, mobile) {
-        // this.$router.push({ name: 'editsrt', params: { srtId:id, mobile }})
-        this.$router.push({ path: '/editsrt/' + id + "/" + mobile })
-      },
-      onTrans (id) {
-        this.$router.push({ path: '/transsrt/' + id })
-      },
-      ondelete (id) {
-        if (confirm('是否要删除？')) {
-          const that = this;
-          webapi.deleteSrt(id).then(result => {
-            console.log(this);
-            if (result.data.error == 0) {
-              that.srtFiles = that.srtFiles.filter(o => o.id != id);
-            }
-          });
-        }
-      },
-      ondownload (id) {
-        window.location.href = '../srt/Download/' + id;
-      },
-      ondownload2 (id) {
-        window.location.href = '../srt/downloadtrans/' + id;
-      },
-      ondownload3 (id) {
-        window.location.href = '../srt/downloadtwolang/' + id;
-      },
-      ondownload4 (id) {
-        window.location.href = '../srt/DownloadBilibili/' + id;
+  methods: {
+    onedit(id, mobile) {
+      // this.$router.push({ name: 'editsrt', params: { srtId:id, mobile }})
+      this.$router.push({ path: "/editsrt/" + id + "/" + mobile });
+    },
+    onTrans(id) {
+      this.$router.push({ path: "/transsrt/" + id });
+    },
+    ondelete(id) {
+      if (confirm("是否要删除？")) {
+        const that = this;
+        webapi.deleteSrt(id).then(result => {
+          console.log(this);
+          if (result.data.error == 0) {
+            that.srtFiles = that.srtFiles.filter(o => o.id != id);
+          }
+        });
       }
+    },
+    onTransAll(id) {      
+      webapi.srtTransAll(id).then(result => {
+        console.log(result);
+        if (result.data.error == 0) {
+          alert('已经开始翻译，请稍后刷新');
+        }else{
+          alert(result.data.error_msg);
+        }
+      });
+    },
+    ondownload(id) {
+      window.location.href = "../srt/Download/" + id;
+    },
+    ondownload2(id) {
+      window.location.href = "../srt/downloadtrans/" + id;
+    },
+    ondownload3(id) {
+      window.location.href = "../srt/downloadtwolang/" + id;
+    },
+    ondownload4(id) {
+      window.location.href = "../srt/DownloadBilibili/" + id;
     }
-}
+  }
+};
 </script>

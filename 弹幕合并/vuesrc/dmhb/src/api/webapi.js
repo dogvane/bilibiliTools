@@ -35,7 +35,9 @@ axios.interceptors.response.use(
                 case 401:
                     router.replace({
                         path: '/login',
-                        query: { redirect: router.currentRoute.fullPath }
+                        query: {
+                            redirect: router.currentRoute.fullPath
+                        }
                     });
                     break;
                     // 403 token过期                
@@ -171,7 +173,11 @@ const webapi = {
         return ret;
     },
     updateSource(srtId, id, text) {
-        var data = { srtId, id, text };
+        var data = {
+            srtId,
+            id,
+            text
+        };
         var ret = axios.post(`/api/srt/updateSource/`, data);
         ret.then(response => {
             console.log(response.data);
@@ -181,7 +187,11 @@ const webapi = {
         return ret;
     },
     replaceSource(srtId, text, replace) {
-        var data = { srtId, replace, text };
+        var data = {
+            srtId,
+            replace,
+            text
+        };
         var ret = axios.post(`/api/srt/replaceSource/`, data);
         ret.then(response => {
             console.log(response.data);
@@ -191,8 +201,21 @@ const webapi = {
         return ret;
     },
     updateTrans(srtId, id, text) {
-        var data = { srtId, id, text };
+        var data = {
+            srtId,
+            id,
+            text
+        };
         var ret = axios.post(`/api/srt/updateTrans/`, data);
+        ret.then(response => {
+            console.log(response.data);
+        }).catch(error => {
+            console.log(error);
+        });
+        return ret;
+    },
+    srtTransAll(srtId) {
+        var ret = axios.post(`/api/srt/srtTransAll/?srtId=` + srtId);
         ret.then(response => {
             console.log(response.data);
         }).catch(error => {

@@ -201,7 +201,7 @@ namespace 弹幕合并.Bussiness
                 if (!string.IsNullOrEmpty(trans))
                 {
                     line.Trans = trans;
-
+                    Console.WriteLine(trans);
                     if (notTrnas)
                         line.Trans2 = line.Trans;
                 }
@@ -266,6 +266,35 @@ namespace 弹幕合并.Bussiness
             }
 
             DelaySaveFile(ret.srtFile, ret.jsonObj);
+            return (null, rettb.ToArray());
+        }
+
+        /// <summary>
+        /// 翻译所有的内容
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="srtId"></param>
+        /// <returns></returns>
+        public (string error, TransBattuta[] battuta) SrtTransAll(int userId, int srtId)
+        {
+            var ret = GetSrt(userId, srtId);
+            if (ret.error != null)
+                return (ret.error, null);
+            List<TransBattuta> rettb = new List<TransBattuta>();
+
+            ThreadPool.QueueUserWorkItem(o =>
+            {
+                foreach (var item in ret.jsonObj.Battutas)
+                {
+                    if (string.IsNullOrEmpty(item.Trans))
+                    {
+                        TransLine(item);
+                    }
+                }
+
+                DelaySaveFile(ret.srtFile, ret.jsonObj);
+            });
+            
             return (null, rettb.ToArray());
         }
 
