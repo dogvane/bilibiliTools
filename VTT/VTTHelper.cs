@@ -130,7 +130,7 @@ namespace VTT
 
                             line.Words.Add(new VttWord
                             {
-                                Text = words[0],
+                                Text = words[0].Trim(),
                                 From = line.From,
                                 To = ms[0].Trim('<', '>'),
                             });
@@ -147,7 +147,7 @@ namespace VTT
 
                             line.Words.Add(new VttWord
                             {
-                                Text = words[words.Length - 1].TrimString("<c>", "</c>"),
+                                Text = words[words.Length - 1].TrimString("<c>", "</c>").Trim(),
                                 From = ms[words.Length - 2].Trim('<', '>'),
                                 To = line.To,
                             });

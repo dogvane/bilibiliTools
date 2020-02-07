@@ -14,6 +14,7 @@ using VTT;
 using System.Threading;
 using 弹幕合并.Bussiness.Subtitles;
 using TimeExtend = 弹幕合并.Common.TimeExtend;
+using VVTRebuild;
 
 namespace 弹幕合并.Bussiness
 {
@@ -260,7 +261,9 @@ namespace 弹幕合并.Bussiness
                     continue;
                 }
 
-                TransLine(line);                
+                TransLine(line);
+                
+                Thread.Sleep((int)(1000 * TransSleepSec));
 
                 rettb.Add(line);
             }
@@ -268,6 +271,11 @@ namespace 弹幕合并.Bussiness
             DelaySaveFile(ret.srtFile, ret.jsonObj);
             return (null, rettb.ToArray());
         }
+
+        /// <summary>
+        /// 翻译api可能会有访问限制，这里控制每次翻译的间隔
+        /// </summary>
+        public double TransSleepSec { get; set; } = 1;
 
         /// <summary>
         /// 翻译所有的内容
@@ -289,6 +297,7 @@ namespace 弹幕合并.Bussiness
                     if (string.IsNullOrEmpty(item.Trans))
                     {
                         TransLine(item);
+                        Thread.Sleep((int)(1000 * TransSleepSec));
                     }
                 }
 
@@ -657,6 +666,11 @@ namespace 弹幕合并.Bussiness
             var vtt = VTTHelper.GetVTTFromFile(saveFile);
 
             var jsonObj = new SrtJsonFile();
+            if(ismerge)
+            {
+                vtt = VvtRebuild.Rebuild(vtt);
+            }
+
             jsonObj.Battutas = ConverVttToSubtitles(vtt.Lines);
             jsonObj.FileName = fileName;
             jsonObj.Version = 1;
