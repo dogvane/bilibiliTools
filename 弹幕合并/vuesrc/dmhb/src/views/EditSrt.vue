@@ -20,22 +20,23 @@
             {{ item.trans }}
           </td>
           <td>
-            <button @click="onUp(item.id)">Up</button>
-            <button @click="onDown(item.id)">Down</button>
-            <button @click="onTrans(item.id)">Trans</button>
-            <button @click="onLineUp(item.id)">Up Line</button>
-            <button @click="onLineDown(item.id)">Down Line</button>
+            <b-button class="btnO" variant="outline-primary" size="sm" @click="onUp(item.id)">Up</b-button>
+            <b-button class="btnO" variant="outline-primary" size="sm" @click="onDown(item.id)">Down</b-button>
+            <b-button class="btnO" variant="outline-primary" size="sm" @click="onTrans(item.id)">Trans</b-button>
+            <b-button v-if="mobile === false" class="btnO" variant="outline-primary" size="sm" @click="onLineUp(item.id)">UpL</b-button>
+            <b-button v-if="mobile === false" class="btnO" variant="outline-primary" size="sm" @click="onLineDown(item.id)">DownL</b-button>
           </td>
         </tr>
       </table>
     </div>
-    <div class="transbox" :style="mobile?'top:10px':'top:100px'">
+    <div v-if="mobile === false" class="transbox" :style="mobile?'top:10px':'top:100px'">
       <textarea type="text" class="usertrans" v-model="replaceSource" @blur="onTotalSource()" />
       <textarea type="text" class="usertrans" v-model="replaceData" />
-      <button
+      <b-button
+        variant="outline-primary"
         v-bind:disabled="replacing"
         @click="onReplace()"
-      >替换{{ includeCount > 0 ? '(' + includeCount +')':''}}</button>
+      >替换{{ includeCount > 0 ? '(' + includeCount +')':''}}</b-button>
     </div>
   </div>
 </template>
@@ -47,7 +48,7 @@
 }
 
 .transbox {
-  width: 400px;
+  width: 350px;
   /*height: 300px;*/
   position: fixed;
   right: 40px;
@@ -70,6 +71,10 @@ button {
 .usertrans {
   width: 160px;
   height: 2em;
+  margin: 5px;
+}
+.btnO
+{
   margin: 5px;
 }
 </style>
