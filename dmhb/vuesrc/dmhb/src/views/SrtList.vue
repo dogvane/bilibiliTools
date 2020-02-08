@@ -1,11 +1,11 @@
 <template>
   <div class="home">
     <h1>当前字幕</h1>
-    <ul>
-      <li v-for="srtfile in srtFiles" :key="srtfile.id" class="strlist">
-        <span class="title">{{ srtfile.srtFileName }}</span>
-        <span class="time">{{ srtfile.uploadTime + '/' + srtfile.lastUpdate}}</span>
-        <span>
+    <table>
+      <tr v-for="srtfile in srtFiles" :key="srtfile.id" class="strlist">
+        <td class="title">{{ srtfile.srtFileName }}</td>
+        <!-- <div class="time">{{ srtfile.uploadTime + '/' + srtfile.lastUpdate}}</div> -->
+        <td class="opBtn">
           <b-dropdown
             class="btnlist"
             variant="info"
@@ -18,7 +18,7 @@
             <b-dropdown-item @click="onedit(srtfile.id, false)">PC编辑</b-dropdown-item>
             <b-dropdown-item @click="onedit(srtfile.id, true)">手机</b-dropdown-item>
           </b-dropdown>
-          
+
           <b-dropdown class="btnlist" variant="info" size="sm" right text="翻译" split>
             <b-dropdown-item @click="onTrans(srtfile.id, true)">人工翻译字幕</b-dropdown-item>
             <b-dropdown-item @click="onTransAll(srtfile.id)">翻译所有</b-dropdown-item>
@@ -42,9 +42,9 @@
             <b-dropdown-item @click="ondownload3(srtfile.id)">下载中英文</b-dropdown-item>
             <b-dropdown-item @click="ondownload4(srtfile.id)">下载b站弹幕</b-dropdown-item>
           </b-dropdown>
-        </span>
-      </li>
-    </ul>
+        </td>
+      </tr>
+    </table>
   </div>
 </template>
 
@@ -62,7 +62,14 @@ button {
   margin: 0px 10px;
 }
 .strlist {
-  height: 40px;
+  line-height: 40px;
+  border-bottom-style: solid;
+  border-bottom-color: darkgray;
+  border-bottom-width: 1px;
+}
+.opBtn {
+  width: 360px;
+  float: right;
 }
 </style>
 

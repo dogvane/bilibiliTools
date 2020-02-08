@@ -8,18 +8,18 @@
     <div class="main">
       <table class="tbcontent">
         <tr v-for="item in srtlines" :key="item.id" :id="item.id">
-          <td v-if="mobile === false">
+          <td v-if="mobile === false" class="td1">
             {{ item.from.replace('00:', '')}} => {{item.to.replace('00:', '')}}
             <br />
             ({{ item.duration.toFixed(2, 10)}})
           </td>
-          <td v-if="mobile === true">({{ item.duration.toFixed(2, 10)}})</td>
-          <td>
+          <td v-if="mobile === true" class="td1p">({{ item.duration.toFixed(2, 10)}})</td>
+          <td class="tdText">
             {{ item.text }}
             <br />
             {{ item.trans }}
           </td>
-          <td>
+          <td class="td2">
             <b-button class="btnO" variant="outline-primary" size="sm" @click="onUp(item.id)">Up</b-button>
             <b-button class="btnO" variant="outline-primary" size="sm" @click="onDown(item.id)">Down</b-button>
             <b-button class="btnO" variant="outline-primary" size="sm" @click="onTrans(item.id)">Trans</b-button>
@@ -76,6 +76,19 @@ button {
 .btnO
 {
   margin: 5px;
+}
+.td1{
+  min-width: 190px;
+}
+.td1p{
+  min-width: 60px;
+}
+.td2{
+  width: 200px;
+}
+.tdText
+{
+  word-wrap:break-word;
 }
 </style>
 
