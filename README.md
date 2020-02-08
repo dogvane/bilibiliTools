@@ -1,25 +1,31 @@
 # bilibili工具包
 
-## Youtube字幕合并与编辑
-可以将youtube下载的字幕相邻的两个时间比较短的字幕，按照5s的标准进行合并
-可以调整合并后字幕达到一些词的前后关系
-可以将英文字幕翻译为中文字幕（使用百度翻译）
+## Youtube字幕(vtt,srt)合并与翻译工具--dmhb
+
+因为youbute的自动字幕，是按照显示的内容来分段的，因为内容过段，并且一些有意义的片段会拆分到2个段落里，这样会导致机器翻译的结果及其的不准确。
+为此，这个工具的第一版实现了上传字幕后，通过上下调整单词的顺序，实现了段落上的意义完整。
+当时解析的是 srt 格式的字幕文件，在某段时间后发现之前的下载字幕的chrome插件无法用了，在研究 [youtube-dl](https://github.com/ytdl-org/youtube-dl)后，发现它支持字幕的下载：
+` youtube-dl --sub-lang en --write-auto-sub  https://www.youtube.com/watch?v=... `
+
+不过下载下来的是 .vtt 格式的文件。该文件虽然解析复杂了一些，但比原先的srt文件包含更多的内容（每个单词有自己的时间）。
+有了这些时间，我将工具做了一下升级，写了一个[VTTRebuild](https://github.com/dogvane/bilibiliTools/tree/master/VVTRebuild)，用于重建字幕的时间轴信息。
+虽然采用极为传统的方法，但也大大节省了对字幕调整的时间。
+
 [在线测试地址](http://bilibilitools.csharptools.cn/dmhb)
 
+软件截图
+![](dmhb/wwwroot/images/img_list.png)
+
+![](dmhb/wwwroot/images/img_edit.png)
+
 ## b站字幕（弹幕）上传（发射）工具
-.net core 改写了，主要是将上面一个工具生成的字幕发到b站的视频里
+.net core 改写了，主要是将上面一个工具生成的字幕发到b站的视频里（当时制作的时候B站还不支持上传文字类型的字幕，现在支持上传了，就没必要用这个了。）
 
 ## 离线视频重命名
 这个是将手机下载的离线视频进行合并的小工具，需要使用ffmpeg进行合并
 
+## VTTToBcc
+将 vtt 格式的字幕文件转为 B站格式 的文件
 
-## Todo List
-* ~~字幕合并的样式需要增加样式~~
-* ~~字幕合并要增加最后一个单词合并后，可以消除空行~~
-* 中文字幕编辑功能
-* ~~中英文合并后的字幕下载~~
-* 完成多用户登录访问功能
-* 文件json和字幕文件保存到腾讯云的cos的功能
-
-
-
+## VTTtoSrt
+将 vtt 格式的字幕文件转为 srt格式 的文件
