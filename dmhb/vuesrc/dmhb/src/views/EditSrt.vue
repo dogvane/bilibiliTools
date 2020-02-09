@@ -59,9 +59,9 @@
   text-align: right;
   padding-right: 10px;
 }
-button {
+/* button {
   margin: 5px;
-}
+} */
 .tbcontent {
   border-collapse: collapse;
 }

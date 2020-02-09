@@ -4,10 +4,10 @@
             <span class="rightTitle">用户名</span><input Type="text" class="inputbox" v-model="username" />
         </p>
         <p class="pl">
-            <span class="rightTitle">密码</span><input Type="password" class="inputbox" v-model="pwd" />
+            <span class="rightTitle">密&nbsp;&nbsp;&nbsp;&nbsp;码</span><input Type="password" class="inputbox" v-model="pwd" />
         </p>
         <p class="pl">
-            <button type="button" v-on:click="register()">注册</button>
+            <b-button class="register" variant="outline-primary"  v-on:click="register()">注册</b-button>
         </p>
         <p>注意：请妥善保管好账号和密码，本系统没密码找回功能</p>
     </div>

@@ -2,8 +2,10 @@
   <div class="home">
     上传文件
         <input type="file" name="updateFile" id="updateFile" multiple=""  v-on:change="fileChange($event.target.files)"/>
-        <button type="button" v-on:click="upload()">上传</button>
-        合并弹幕<input type="checkbox" v-model="ismerge" />
+        <br>
+        <br>
+        <input type="checkbox" v-model="ismerge" /> 重建弹幕时间轴
+        <button class="btnUpload" type="button" v-on:click="upload()">上传</button>
   </div>
 </template>
 
@@ -16,6 +18,15 @@ import '~vue-upload-component/dist/vue-upload-component.part.css'
 
 
  */
+
+ .home
+ {
+   padding: 10px;
+ }
+ .btnUpload
+ {
+   margin: 10px;
+ }
 .file-uploads {
   overflow: hidden;
   position: relative;

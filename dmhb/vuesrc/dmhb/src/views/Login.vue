@@ -4,11 +4,12 @@
             <span class="rightTitle">用户名</span><input Type="text" class="inputbox" v-model="username" />
         </p>
         <p class="pl">
-            <span class="rightTitle">密码</span><input Type="password" class="inputbox" v-model="pwd" />
+            <span class="rightTitle">密&nbsp;&nbsp;&nbsp;&nbsp;码</span><input Type="password" class="inputbox" v-model="pwd" />
         </p>
         <p class="pl">
-            <button type="button" v-on:click="login()">登陆</button>
-            <router-link to="/register" class="register">注册</router-link>
+            <b-button class="register" variant="outline-primary" type="button" v-on:click="login()" >登陆</b-button>
+            <b-button class="register" variant="outline-primary" type="button" v-on:click="register()" >注册</b-button>
+            <!-- <router-link to="/register" class="register">注册</router-link> -->
         </p>
     </div>
 </template>
@@ -24,7 +25,7 @@
   text-align: left;
 }
 .register {
-  padding: 0px 20px;
+  margin: 0px 20px;
 }
 </style>
 
@@ -72,6 +73,9 @@ export default {
                     alert(error);
                 });
         },
+        register(){
+            this.$router.push({ path:'/register'});
+        }
     }
 }
 </script>

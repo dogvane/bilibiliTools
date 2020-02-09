@@ -333,3 +333,5 @@ ASALocalRun/
 /弹幕合并/upfiles/*
 /弹幕合并/jsonfiles/*
 /弹幕合并/appsettings.Development.json
+/dmhb/jsonfiles
+/dmhb/upfiles

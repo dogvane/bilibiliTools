@@ -55,9 +55,9 @@
 .time {
   padding: 0px 10px;
 }
-button {
+/* button {
   padding: 0px 10px;
-}
+} */
 .btnlist {
   margin: 0px 10px;
 }
