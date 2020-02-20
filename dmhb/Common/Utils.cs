@@ -51,7 +51,7 @@ namespace 弹幕合并.Common
             if (source.Count == 0 || t2.Length == 0)
                 return -1;
 
-            for (var i = 0; i < source.Count - t2.Length; i++)
+            for (var i = 0; i < source.Count - t2.Length + 1; i++)
             {
                 var item1 = source[i];
                 var item2 = t2[0];
