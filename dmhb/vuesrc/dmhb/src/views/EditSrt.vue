@@ -19,7 +19,7 @@
             <br />
             {{ item.trans }}
           </td>
-          <td class="td2">
+          <td :class="mobile ? 'td2_m':'td2'">
             <b-button class="btnO" variant="outline-primary" size="sm" @click="onUp(item.id)">Up</b-button>
             <b-button class="btnO" variant="outline-primary" size="sm" @click="onDown(item.id)">Down</b-button>
             <b-button class="btnO" variant="outline-primary" size="sm" @click="onTrans(item.id)">Trans</b-button>
@@ -84,7 +84,11 @@
   min-width: 60px;
 }
 .td2{
-  width: 200px;
+  max-width: 200px;
+}
+.td2_m
+{
+  
 }
 .tdText
 {

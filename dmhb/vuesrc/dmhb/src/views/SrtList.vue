@@ -5,7 +5,7 @@
       <tr v-for="srtfile in srtFiles" :key="srtfile.id" class="strlist">
         <td class="title">{{ srtfile.srtFileName }}</td>
         <!-- <div class="time">{{ srtfile.uploadTime + '/' + srtfile.lastUpdate}}</div> -->
-        <td class="opBtn">
+        <td :class="_isMobile() ? 'opBtn_m':'opBtn'">
           <b-dropdown
             class="btnlist"
             variant="info"
@@ -68,8 +68,11 @@
   border-bottom-width: 1px;
 }
 .opBtn {
-  width: 360px;
+  max-width: 360px;
   float: right;
+}
+.opBtn_m {
+  /* width: 360px; */
 }
 </style>
 
@@ -99,6 +102,10 @@ export default {
     });
   },
   methods: {
+    _isMobile() {
+      let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
+      return flag;
+    },
     onedit(id, mobile) {
       // this.$router.push({ name: 'editsrt', params: { srtId:id, mobile }})
       this.$router.push({ path: "/editsrt/" + id + "/" + mobile });
