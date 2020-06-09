@@ -15,7 +15,8 @@
           </td>
           <td v-if="mobile === true" class="td1p">({{ item.duration.toFixed(2, 10)}})</td>
           <td class="tdText">
-            {{ item.text }}
+            <span v-for="txt in item.words" :class="{'splitText':txt.duration > defaultSplitTime}"  >{{ txt.text }}&nbsp;</span>
+            <!-- {{ item.text }} -->
             <br />
             {{ item.trans }}
           </td>
@@ -46,7 +47,10 @@
   padding-left: 20px;
   font-size: 12px;
 }
-
+.splitText
+{
+  color:red;
+}
 .transbox {
   width: 350px;
   /*height: 300px;*/
@@ -113,7 +117,8 @@ export default {
       replaceSource: "",
       replaceData: "",
       includeCount: 0,
-      replacing: false
+      replacing: false,
+      defaultSplitTime: 0.7,
     };
   },
   created() {
@@ -141,6 +146,10 @@ export default {
         that.srtlines = that.srt.battutas;
       }
     });
+    if(this.$route.query.SplitTime)
+    {
+      this.defaultSplitTime = this.$route.query.SplitTime;
+    }
   },
   methods: {
     onChangeItem(result) {
