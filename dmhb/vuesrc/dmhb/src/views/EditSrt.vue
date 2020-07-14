@@ -15,10 +15,15 @@
           </td>
           <td v-if="mobile === true" class="td1p">({{ item.duration.toFixed(2, 10)}})</td>
           <td class="tdText">
-            <span v-for="txt in item.words" :class="{'splitText':txt.duration > defaultSplitTime}"  >{{ txt.text }}&nbsp;</span>
-            <!-- {{ item.text }} -->
-            <br />
+            <div :class="{'tdTextMobile' : mobile === true}" >
+              <span v-for="txt in item.words" v-bind:key="txt.text" :class="{'splitText' : txt.duration > defaultSplitTime}" >{{ txt.text }}&nbsp;</span>
+            </div>
+             <!-- <div v-if="mobile === true" >
+              {{ item.text }} 
+             </div> -->
+            <div>
             {{ item.trans }}
+            </div>
           </td>
           <td :class="mobile ? 'td2_m':'td2'">
             <b-button class="btnO" variant="outline-primary" size="sm" @click="onUp(item.id)">Up</b-button>
@@ -50,6 +55,13 @@
 .splitText
 {
   color:red;
+}
+.tdTextMobile{
+  display: inline-block;
+}
+.tdTextMobile span
+{
+  float:left;
 }
 .transbox {
   width: 350px;
